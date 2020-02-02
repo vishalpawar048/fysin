@@ -4,20 +4,21 @@ import '../shop/search.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import './productGrid.dart';
+import '../home/slider.dart';
 
 import 'package:flutter/foundation.dart';
 
 class Product with ChangeNotifier {
-  final String id;
+  // final String _id;
   final String name;
   final String description;
-  final int price;
+  final String price;
   final String imageUrl;
   final String website;
   bool isFavorite;
 
   Product({
-    @required this.id,
+    // @required this.id,
     @required this.name,
     @required this.description,
     @required this.price,
@@ -33,32 +34,38 @@ class Product with ChangeNotifier {
 }
 
 class Products extends StatelessWidget {
-  Future<List> fetchAds() async {
-    final response = await http
-        .get('https://wishlist-app-a6894.firebaseio.com/MenProducts.json');
-
-    Map products;
-    final List productsArray = [];
-    if (response.statusCode == 200) {
-      products = json.decode(response.body);
-      products.forEach((prodId, prodData) {
-        productsArray.add(Product(
-          id: prodId,
-          name: prodData['name'],
-          description: prodData['description'],
-          price: prodData['price'],
-          isFavorite: prodData['isFavorite'],
-          imageUrl: prodData['imageUrl'],
-          website: prodData['website'],
-        ));
-      });
-    }
-    //print(">>>>>>>>>>${json.decode(productsArray[0])}");
-    return productsArray;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    var keyword = args.keyword;
+    // print(">>>>>>>>>>>>>>$keyword");
+
+    Future<List> fetchAds() async {
+      final response = await http.post(
+          'http://192.168.1.5:3000/products/getProductsByKeyWords/',
+          body: {
+            'keyword': keyword,
+          });
+//"http://localhost:3000/products/getProductsByKeyWords/"
+      List products;
+      final List productsArray = [];
+      if (response.statusCode == 200) {
+        products = json.decode(response.body)['Product'];
+        products.forEach((prodData) {
+          productsArray.add(Product(
+            //   id: prodData._id,
+            name: prodData['name'],
+            description: prodData['description'],
+            price: prodData['price'],
+            // isFavorite: prodData['isFavorite'],
+            imageUrl: prodData['imgUrls'][0],
+            website: prodData['website'],
+          ));
+        });
+      }
+      return productsArray;
+    }
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -83,8 +90,7 @@ class Products extends StatelessWidget {
               case ConnectionState.waiting:
                 return Center(child: CircularProgressIndicator());
               case ConnectionState.done:
-                if (snapshot.hasError)
-                  return Center(child: Text('Check internet connection'));
+                if (snapshot.hasError) return Center(child: Text("hi"));
                 return ProductGrid(productsArray: snapshot.data);
             } // unreachable
           }),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'package:flutter_scaffold/config.dart';
 
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -10,8 +11,16 @@ class HomeSlider extends StatefulWidget {
   _HomeSliderState createState() => _HomeSliderState();
 }
 
+class ScreenArguments {
+  //final String id;
+  final String keyword;
+
+  ScreenArguments(this.keyword);
+}
+
 class Banner with ChangeNotifier {
   final String id;
+  final String keyword;
   final String imageUrl;
   // final String description;
   // final int price;
@@ -21,6 +30,7 @@ class Banner with ChangeNotifier {
 
   Banner({
     @required this.id,
+    @required this.keyword,
     @required this.imageUrl,
     // @required this.description,
     // @required this.price,
@@ -31,32 +41,29 @@ class Banner with ChangeNotifier {
 }
 
 class _HomeSliderState extends State<HomeSlider> {
-  //final List<String> imgList = [];
+  // final List<String> imgList = [];
   final List imgList = [];
-  Map banners;
-  Future<List> getBanner() async {
-    final response = await http
-        .get('https://wishlist-app-a6894.firebaseio.com/SliderBanner.json');
+  List banners;
+  Map bannerImgsObj;
 
-    Map<String, dynamic> bannerImgsObj;
+  Future<List> getBanner() async {
+    //final response = await http.get('$BASE_URL/banners/getBanners/');
+    //00  var keyword;
+    final response =
+        await http.post('http://192.168.1.5:3000/banners/getBanners/', body: {
+      'type': "Sliding",
+    });
+
     if (response.statusCode == 200) {
       bannerImgsObj = json.decode(response.body);
-      for (final id in bannerImgsObj.keys) {
-        banners = bannerImgsObj[id];
-        print('$id,$banners'); // prints entries like "AED,3.672940"
-      }
-      banners.forEach((id, data) {
-        print(">>>>>>>>>>>>>>$data");
+      banners = bannerImgsObj["Banners"];
+      banners.forEach((data) {
+        // imgList.add(Banner(keyword: data['imgUrl'][0]));
         imgList.add(Banner(
-          id: id,
-          imageUrl: data['url'],
+          id: data['_id'],
+          keyword: data['keyword'],
+          imageUrl: data['imgUrl'][0],
         ));
-        // data.forEach((id, banner) {
-        //   imgList.add(Banner(
-        //     id: id,
-        //     imageUrl: banner['url'],
-        //   ));
-        // });
       });
     }
     //print(">>>>>>>>>>${json.decode(productsArray[0])}");
@@ -78,7 +85,7 @@ class _HomeSliderState extends State<HomeSlider> {
       child: FutureBuilder(
           future: getBanner(),
           builder: (context, AsyncSnapshot snapshot) {
-            CarouselSlider(
+            return CarouselSlider(
               autoPlay: true,
               pauseAutoPlayOnTouch: Duration(seconds: 10),
               height: 200.0,
@@ -88,13 +95,19 @@ class _HomeSliderState extends State<HomeSlider> {
                   builder: (BuildContext context) {
                     return Container(
                         width: MediaQuery.of(context).size.width,
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: i,
-                          placeholder: (context, url) =>
-                              Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) =>
-                              new Icon(Icons.error),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/products',
+                                arguments: ScreenArguments(i.keyword));
+                          },
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: i.imageUrl,
+                            placeholder: (context, url) =>
+                                Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                new Icon(Icons.error),
+                          ),
                         ));
                   },
                 );
