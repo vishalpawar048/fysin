@@ -102,16 +102,16 @@ class HomePageBanners extends StatelessWidget {
                       fontSize: 18,
                       fontWeight: FontWeight.w700)),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0, top: 8.0, left: 8.0),
-              child: RaisedButton(
-                  color: Theme.of(context).primaryColor,
-                  child:
-                      Text('View All', style: TextStyle(color: Colors.white)),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/categorise');
-                  }),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.only(right: 8.0, top: 8.0, left: 8.0),
+            //   child: RaisedButton(
+            //       color: Theme.of(context).primaryColor,
+            //       child:
+            //           Text('View All', style: TextStyle(color: Colors.white)),
+            //       onPressed: () {
+            //         Navigator.pushNamed(context, '/categorise');
+            //       }),
+            // )
           ],
         ),
         Container(

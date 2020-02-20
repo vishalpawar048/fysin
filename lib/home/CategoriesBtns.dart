@@ -9,18 +9,20 @@ class CategoriesBtns extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         //sectionHeader('All Categories', onViewMore: () {}),
+        // SizedBox(height: 5),
         SizedBox(
           height: 100,
           child: ListView(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
+            // padding: const EdgeInsets.all(20.0),
             children: <Widget>[
+              headerCategoryItem('All', Fryo.dinner, onPressed: () {}),
+              headerCategoryItem('Men', Fryo.dinner, onPressed: () {}),
+              headerCategoryItem('Women', Fryo.dinner, onPressed: () {}),
+              headerCategoryItem('Gadgets', Fryo.dinner, onPressed: () {}),
+              headerCategoryItem('Gifts', Fryo.dinner, onPressed: () {}),
               headerCategoryItem('Frieds', Fryo.dinner, onPressed: () {}),
-              headerCategoryItem('Fast Food', Fryo.food, onPressed: () {}),
-              headerCategoryItem('Creamery', Fryo.poop, onPressed: () {}),
-              headerCategoryItem('Hot Drinks', Fryo.coffee_cup,
-                  onPressed: () {}),
-              headerCategoryItem('Vegetables', Fryo.leaf, onPressed: () {}),
             ],
           ),
         )
@@ -30,7 +32,7 @@ class CategoriesBtns extends StatelessWidget {
 
   Widget headerCategoryItem(String name, IconData icon, {onPressed}) {
     return Container(
-      margin: EdgeInsets.only(left: 15),
+      margin: EdgeInsets.only(top: 2, left: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,6 +46,7 @@ class CategoriesBtns extends StatelessWidget {
               // height: 86,
               child: FloatingActionButton(
                 shape: CircleBorder(),
+                elevation: 2.0,
                 heroTag: name,
                 onPressed: onPressed,
                 backgroundColor: Colors.white,

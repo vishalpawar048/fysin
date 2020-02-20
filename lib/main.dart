@@ -17,7 +17,10 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final Locale locale = Locale('en');
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider<AuthBlock>.value(value: AuthBlock())],
+    providers: [
+      ChangeNotifierProvider<AuthBlock>.value(value: AuthBlock()),
+      ChangeNotifierProvider<Product>.value(value: Product()),
+    ],
     child: MaterialApp(
       localizationsDelegates: [
         AppLocalizations.delegate,

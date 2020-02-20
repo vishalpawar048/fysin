@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../config.dart';
 import '../home/wishListBtn.dart';
 import '../shop/search.dart';
 import 'package:http/http.dart' as http;
@@ -9,27 +12,62 @@ import '../home/slider.dart';
 import 'package:flutter/foundation.dart';
 
 class Product with ChangeNotifier {
-  // final String _id;
-  final String name;
-  final String description;
-  final String price;
-  final String imageUrl;
-  final String website;
+  String id;
+  String name;
+  String description;
+  String price;
+  List imageUrls;
+  String website;
+  String url;
   bool isFavorite;
 
   Product({
-    // @required this.id,
-    @required this.name,
-    @required this.description,
-    @required this.price,
-    @required this.imageUrl,
-    @required this.website,
+    this.id,
+    this.name,
+    this.description,
+    this.price,
+    this.imageUrls,
+    this.website,
+    this.url,
     this.isFavorite = false,
   });
 
-  void toggleFavoriteStatus() {
+  void _setFavValue(bool newValue) {
+    isFavorite = newValue;
+    notifyListeners();
+  }
+
+  Future<void> toggleWishlistStatus(emailId, id) async {
+    final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
+    if (isFavorite) {
+      try {
+        final response =
+            await http.post('$BASE_URL/wishlist/addToWishlist', body: {
+          'emailId': emailId,
+          'productId': id,
+        });
+        if (response.statusCode >= 400) {
+          _setFavValue(oldStatus);
+        }
+      } catch (error) {
+        _setFavValue(oldStatus);
+      }
+    } else {
+      try {
+        final response =
+            await http.post('$BASE_URL/wishlist/removefromWishlist', body: {
+          'emailId': emailId,
+          'productId': id,
+        });
+        if (response.statusCode >= 400) {
+          _setFavValue(oldStatus);
+        }
+      } catch (error) {
+        _setFavValue(oldStatus);
+      }
+    }
   }
 }
 
@@ -38,28 +76,47 @@ class Products extends StatelessWidget {
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     var keyword = args.keyword;
-    // print(">>>>>>>>>>>>>>$keyword");
 
-    Future<List> fetchAds() async {
-      final response = await http.post(
-          'http://192.168.1.5:3000/products/getProductsByKeyWords/',
-          body: {
-            'keyword': keyword,
-          });
-//"http://localhost:3000/products/getProductsByKeyWords/"
+    Future<List> fetchProducts() async {
+      List wishlistIds;
+      List wishlistArray = [];
       List products;
       final List productsArray = [];
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String emailId = prefs.getString('emailId') ?? "false";
+      final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? "false";
+
+      final response =
+          await http.post('$BASE_URL/products/getProductsByKeyWords/', body: {
+        'keyword': keyword,
+      });
+
+      if (isLoggedIn) {
+        final wishlistRes =
+            await http.get('$BASE_URL/wishlist/getWishlist/$emailId');
+
+        if (wishlistRes.statusCode == 200) {
+          wishlistIds = json.decode(wishlistRes.body);
+          wishlistIds.forEach((prodData) {
+            wishlistArray.add(
+              prodData['_id'],
+            );
+          });
+        }
+      }
+
       if (response.statusCode == 200) {
         products = json.decode(response.body)['Product'];
         products.forEach((prodData) {
           productsArray.add(Product(
-            //   id: prodData._id,
+            id: prodData['_id'],
             name: prodData['name'],
             description: prodData['description'],
             price: prodData['price'],
-            // isFavorite: prodData['isFavorite'],
-            imageUrl: prodData['imgUrls'][0],
+            isFavorite: wishlistArray.contains(prodData['_id']),
+            imageUrls: prodData['imgUrls'],
             website: prodData['website'],
+            url: prodData['url'],
           ));
         });
       }
@@ -79,7 +136,7 @@ class Products extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-          future: fetchAds(),
+          future: fetchProducts(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/home/CategoriesBtns.dart';
 import '../shop/search.dart';
-import './wishlistBtn.dart';
+import './wishListBtn.dart';
 import './homePageBanners.dart';
 
 // import 'drawer.dart';
@@ -16,9 +16,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Next page'),
-      // ),
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(

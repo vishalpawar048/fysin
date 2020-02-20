@@ -15,7 +15,7 @@ class WishListBtn extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, '/categories');
+            Navigator.pushNamed(context, '/wishList');
           },
         ));
   }

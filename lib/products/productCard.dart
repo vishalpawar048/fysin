@@ -1,32 +1,93 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_scaffold/products/product_detail.dart';
+import 'package:flutter_scaffold/products/products.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transparent_image/transparent_image.dart';
+
+class ProductArg {
+  Product product;
+}
 
 class ProductCard extends StatelessWidget {
+  final Product product;
   ProductCard(this.product);
 
-  final product;
+  Widget _buildImageWidget(context) {
+    Product product = Provider.of<Product>(context);
+    Future checkLogin() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-  Widget _buildImageWidget() {
-    if (product.imageUrl != null && product.imageUrl != '') {
-      print("::::::::::::::::::${product.imageUrl.runtimeType}");
-      return SizedBox(
-        height: 160,
-        child: Hero(
-          tag: product,
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: product.imageUrl,
+      if (isLoggedIn) {
+        final String emailId = prefs.getString('emailId') ?? "false";
 
-            // placeholder: (context, url) =>
-            //     Center(child: CircularProgressIndicator()),
-            // errorWidget: (context, url, error) => new Icon(Icons.error),
+        return product.toggleWishlistStatus(emailId, product.id);
+      } else {
+        return Navigator.pushNamed(context, '/auth', arguments: "");
+      }
+    }
+
+    if (product.imageUrls[0] != null && product.imageUrls[0] != '') {
+      String imageUrl = product.imageUrls[0];
+      String price = product.price;
+      return Card(
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return ChangeNotifierProvider<Product>.value(
+                    value: product,
+                    child: ProductDetails(),
+                  );
+                },
+              ),
+            );
+            // Navigator.of(context).pushNamed('/productDetails');
+            // Navigator.pushNamed(context, '/productDetails');
+          },
+          child: Stack(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              FadeInImage.assetNetwork(
+                placeholder: 'assets/images/loading_1.gif',
+                image: imageUrl,
+              ),
+              Positioned(
+                  right: 1.0,
+                  top: 1.0,
+                  child: IconButton(
+                    icon: product.isFavorite
+                        ? Icon(Icons.favorite, color: Colors.pink)
+                        : Icon(Icons.favorite_border, color: Colors.pink),
+                    color: Theme.of(context).accentColor,
+                    onPressed: () {
+                      checkLogin();
+                    },
+                  )),
+              Positioned(
+                  left: 10.0,
+                  bottom: 10.0,
+                  child: Text(
+                    '₹ $price',
+                    textAlign: TextAlign.right,
+                    style: new TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
+                  ))
+            ],
           ),
         ),
       );
-      // return Image.network(product.imageUrl);
-      // return Image.network('http://uae.microless.com/cdn/no_image.jpg');
+      // return
     } else {
-      return Image.network('http://uae.microless.com/cdn/no_image.jpg');
+      return FadeInImage.memoryNetwork(
+        placeholder: kTransparentImage,
+        image: 'http://uae.microless.com/cdn/no_image.jpg',
+      );
     }
   }
 
@@ -67,44 +128,8 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        // onTap: () {
-        //   Navigator.pushNamed(context, '/productDetails',
-        //       arguments: product["imageUrl"]);
-        // },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // SizedBox(
-            //   height: 160,
-            //   child: Hero(
-            //     tag: 'https://uae.microless.com/cdn/no_image.jpg',
-            //     child: CachedNetworkImage(
-            //       fit: BoxFit.cover,
-            //       imageUrl:
-            //           "https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80",
-            //       placeholder: (context, url) =>
-            //           Center(child: CircularProgressIndicator()),
-            //       errorWidget: (context, url, error) => new Icon(Icons.error),
-            //     ),
-            //   ),
-            // ),
-            // CachedNetworkImage(
-            //   fit: BoxFit.cover,
-            //   imageUrl: 'https://uae.microless.com/cdn/no_image.jpg',
-            //   placeholder: (context, url) =>
-            //       Center(child: CircularProgressIndicator()),
-            //   errorWidget: (context, url, error) => new Icon(Icons.error),
-            // ),
+    // return Card(child: _buildImageWidget()
 
-            _buildImageWidget(),
-            // _buildTitleWidget(),
-            // _buildPriceWidget(),
-            // _buildLocationWidget(),
-          ],
-        ),
-      ),
-    );
+    return _buildImageWidget(context);
   }
 }

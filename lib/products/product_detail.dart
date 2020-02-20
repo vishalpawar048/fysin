@@ -1,17 +1,54 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_scaffold/blocks/auth_block.dart';
+import 'package:flutter_scaffold/products/products.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:url_launcher/url_launcher.dart';
+import './productCard.dart';
+import '../auth/auth.dart';
 //import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ProductDetails extends StatelessWidget {
+  // final Product product;
+  // ProductDetails(this.product);
+
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments;
-    // final args =
-    //     'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80';
+    //bool isFavorite = false;
+    bool isLoggedIn = false;
+    AuthBlock auth = Provider.of<AuthBlock>(context);
+    // Product product = ModalRoute.of(context).settings.arguments;
+    Product product = Provider.of<Product>(context);
+
+    Future checkLogin() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+      if (isLoggedIn) {
+        final String emailId = prefs.getString('emailId') ?? "false";
+
+        return product.toggleWishlistStatus(emailId, product.id);
+      } else {
+        return Navigator.pushNamed(context, '/auth', arguments: "");
+      }
+    }
+
+    _launchURL() async {
+      final url = product.url;
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Detail'),
+        title: Text('Product Details'),
+        elevation: 0.0,
       ),
       body: SafeArea(
         top: false,
@@ -20,20 +57,48 @@ class ProductDetails extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              SizedBox(
-                width: double.infinity,
-                height: 260,
-                child: Hero(
-                  tag: args,
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl: args,
-                    placeholder: (context, url) =>
-                        Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => new Icon(Icons.error),
-                  ),
-                ),
+              CarouselSlider(
+                autoPlay: false,
+                pauseAutoPlayOnTouch: Duration(seconds: 10),
+                height: 500.0,
+                viewportFraction: 1.0,
+                items: product.imageUrls.map((i) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: InkWell(
+                            // onTap: () {
+                            //   Navigator.pushNamed(context, '/products',
+                            //       arguments: ScreenArguments(i.keyword));
+                            // },
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: i,
+                              placeholder: (context, url) =>
+                                  Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) =>
+                                  new Icon(Icons.error),
+                            ),
+                          ));
+                    },
+                  );
+                }).toList(),
               ),
+              // SizedBox(
+              //   width: double.infinity,
+              //   height: 260,
+              //   child: Hero(
+              //     tag: product,
+              //     child: CachedNetworkImage(
+              //       fit: BoxFit.cover,
+              //       imageUrl: product.imageUrl,
+              //       placeholder: (context, url) =>
+              //           Center(child: CircularProgressIndicator()),
+              //       errorWidget: (context, url, error) => new Icon(Icons.error),
+              //     ),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Column(
@@ -43,7 +108,7 @@ class ProductDetails extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15, bottom: 15),
                         child: Text(
-                          'Product Title Name',
+                          product.name,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 24,
@@ -60,43 +125,39 @@ class ProductDetails extends StatelessWidget {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(right: 10.0),
-                                child: Text(
-                                  '\$90',
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
                               ),
-                              Text('\$190',
+                              Text('₹ ${product.price}',
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      decoration: TextDecoration.lineThrough)),
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    // decoration: TextDecoration.lineThrough
+                                  )),
                             ],
                           ),
                           Row(
                             children: <Widget>[
-                              SmoothStarRating(
-                                  allowHalfRating: false,
-                                  onRatingChanged: (v) {},
-                                  starCount: 5,
-//                                rating: product['rating'],
-                                  size: 20.0,
-                                  color: Colors.amber,
-                                  borderColor: Colors.amber,
-                                  spacing: -0.8),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Text('(0.00)',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    )),
-                              ),
+                              Text('${product.website}',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    // decoration: TextDecoration.lineThrough
+                                  )),
                             ],
                           ),
+                          Row(children: <Widget>[
+                            IconButton(
+                              icon: product.isFavorite
+                                  ? Icon(Icons.favorite, color: Colors.pink)
+                                  : Icon(
+                                      Icons.favorite_border,
+                                    ),
+                              color: Theme.of(context).accentColor,
+                              onPressed: () {
+                                checkLogin();
+                              },
+                            ),
+                          ]),
+//
                         ],
                       ),
                     ),
@@ -119,11 +180,18 @@ class ProductDetails extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 10.0),
                               child: Text(
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. but also the leap into electronic typesetting Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+                                product.description,
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 16),
                               ),
-                            ))
+                            )),
+                        Container(
+                            child: Center(
+                                child: new RaisedButton(
+                          color: Colors.green,
+                          onPressed: _launchURL,
+                          child: new Text('Buy Now'),
+                        ))),
                       ],
                     ),
                   ],
