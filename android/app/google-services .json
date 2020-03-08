@@ -8,20 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:885767877817:android:d468baff6d6abcc0c49768",
+        "mobilesdk_app_id": "1:885767877817:android:7b6d73fbbc5ce28bc49768",
         "android_client_info": {
-          "package_name": "com.Fysin.Fysin"
+          "package_name": "com.bruhh.bruhh"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "885767877817-39j2sbklc1lbgq0d5ds0ec779h1fficl.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.Fysin.Fysin",
-            "certificate_hash": "ad49bc5ef52949193e4ffcecb474aa85ac26db44"
-          }
-        },
         {
           "client_id": "885767877817-efjianq4g0aon2nlhka7e6e406u5d5hm.apps.googleusercontent.com",
           "client_type": 3

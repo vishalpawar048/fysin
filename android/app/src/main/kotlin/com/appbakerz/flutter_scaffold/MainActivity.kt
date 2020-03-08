@@ -1,4 +1,4 @@
-package com.Fysin.Fysin
+package com.bruhh.bruhh
 
 import android.os.Bundle
 

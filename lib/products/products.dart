@@ -84,26 +84,12 @@ class Products extends StatelessWidget {
       final List productsArray = [];
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final String emailId = prefs.getString('emailId') ?? "false";
-      final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? "false";
+      final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
       final response =
           await http.post('$BASE_URL/products/getProductsByKeyWords/', body: {
         'keyword': keyword,
       });
-
-      if (isLoggedIn) {
-        final wishlistRes =
-            await http.get('$BASE_URL/wishlist/getWishlist/$emailId');
-
-        if (wishlistRes.statusCode == 200) {
-          wishlistIds = json.decode(wishlistRes.body);
-          wishlistIds.forEach((prodData) {
-            wishlistArray.add(
-              prodData['_id'],
-            );
-          });
-        }
-      }
 
       if (response.statusCode == 200) {
         products = json.decode(response.body)['Product'];
@@ -147,8 +133,12 @@ class Products extends StatelessWidget {
               case ConnectionState.waiting:
                 return Center(child: CircularProgressIndicator());
               case ConnectionState.done:
-                if (snapshot.hasError) return Center(child: Text("hi"));
-                return ProductGrid(productsArray: snapshot.data);
+                if (snapshot.hasError)
+                  return Center(
+                      child: Text(
+                          "Something went wrong. Please try after some time.."));
+                return ProductGrid(
+                    productsArray: snapshot.data, productType: 'product');
             } // unreachable
           }),
     );

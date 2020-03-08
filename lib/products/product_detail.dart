@@ -5,6 +5,8 @@ import 'package:flutter_scaffold/blocks/auth_block.dart';
 import 'package:flutter_scaffold/products/products.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:url_launcher/url_launcher.dart';
 import './productCard.dart';
@@ -37,7 +39,7 @@ class ProductDetails extends StatelessWidget {
     }
 
     _launchURL() async {
-      final url = product.url;
+      final String url = product.url;
       if (await canLaunch(url)) {
         await launch(url);
       } else {
@@ -68,10 +70,6 @@ class ProductDetails extends StatelessWidget {
                       return Container(
                           width: MediaQuery.of(context).size.width,
                           child: InkWell(
-                            // onTap: () {
-                            //   Navigator.pushNamed(context, '/products',
-                            //       arguments: ScreenArguments(i.keyword));
-                            // },
                             child: CachedNetworkImage(
                               fit: BoxFit.cover,
                               imageUrl: i,
@@ -85,20 +83,6 @@ class ProductDetails extends StatelessWidget {
                   );
                 }).toList(),
               ),
-              // SizedBox(
-              //   width: double.infinity,
-              //   height: 260,
-              //   child: Hero(
-              //     tag: product,
-              //     child: CachedNetworkImage(
-              //       fit: BoxFit.cover,
-              //       imageUrl: product.imageUrl,
-              //       placeholder: (context, url) =>
-              //           Center(child: CircularProgressIndicator()),
-              //       errorWidget: (context, url, error) => new Icon(Icons.error),
-              //     ),
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Column(
@@ -189,7 +173,13 @@ class ProductDetails extends StatelessWidget {
                             child: Center(
                                 child: new RaisedButton(
                           color: Colors.green,
-                          onPressed: _launchURL,
+                          // onPressed: _launchURL,
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) => WebPage(
+                                      selectedUrl: product.url,
+                                    )));
+                          },
                           child: new Text('Buy Now'),
                         ))),
                       ],
@@ -201,6 +191,31 @@ class ProductDetails extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class WebPage extends StatelessWidget {
+  final String selectedUrl;
+
+  WebPage({
+    @required this.selectedUrl,
+  });
+  WebViewController _controller;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Bruhh'),
+      ),
+      // We're using a Builder here so we have a context that is below the Scaffold
+      // to allow calling Scaffold.of(context) so we can show a snackbar.
+      body: Builder(builder: (BuildContext context) {
+        return WebView(
+          initialUrl: selectedUrl,
+          javascriptMode: JavascriptMode.unrestricted,
+        );
+      }),
     );
   }
 }

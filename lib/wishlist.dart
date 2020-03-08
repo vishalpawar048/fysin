@@ -307,8 +307,9 @@ class ShowWishList extends StatelessWidget {
     List products;
 
     final List productsArray = [];
-    if (response.statusCode == 200) {
-      products = json.decode(response.body);
+    if (response.statusCode == 200 &&
+        json.decode(response.body)["Status"] == "success") {
+      products = json.decode(response.body)["wishlist"];
       products.forEach((prodData) {
         productsArray.add(Product(
           id: prodData['_id'],
@@ -321,8 +322,10 @@ class ShowWishList extends StatelessWidget {
           url: prodData['url'],
         ));
       });
+      return productsArray;
+    } else {
+      return productsArray;
     }
-    return productsArray;
   }
 
   @override
@@ -340,8 +343,10 @@ class ShowWishList extends StatelessWidget {
               case ConnectionState.waiting:
                 return Center(child: CircularProgressIndicator());
               case ConnectionState.done:
-                if (snapshot.hasError) return Center(child: Text("hi"));
-                return ProductGrid(productsArray: snapshot.data);
+                if (snapshot.hasError)
+                  return Center(child: Text("Your wishlist is empty"));
+                return ProductGrid(
+                    productsArray: snapshot.data, productType: 'wishlist');
             } // unreachable
           });
     } else {

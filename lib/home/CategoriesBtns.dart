@@ -8,21 +8,22 @@ class CategoriesBtns extends StatelessWidget {
       // mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        //sectionHeader('All Categories', onViewMore: () {}),
-        // SizedBox(height: 5),
         SizedBox(
           height: 100,
           child: ListView(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            // padding: const EdgeInsets.all(20.0),
             children: <Widget>[
-              headerCategoryItem('All', Fryo.dinner, onPressed: () {}),
-              headerCategoryItem('Men', Fryo.dinner, onPressed: () {}),
-              headerCategoryItem('Women', Fryo.dinner, onPressed: () {}),
-              headerCategoryItem('Gadgets', Fryo.dinner, onPressed: () {}),
-              headerCategoryItem('Gifts', Fryo.dinner, onPressed: () {}),
-              headerCategoryItem('Frieds', Fryo.dinner, onPressed: () {}),
+              headerCategoryItem('New', "assets/images/new.jpg",
+                  onPressed: () {}),
+              headerCategoryItem('Men', "assets/images/men.jpg",
+                  onPressed: () {}),
+              headerCategoryItem('Women', "assets/images/women.jpg",
+                  onPressed: () {}),
+              headerCategoryItem('Gadgets', "assets/images/gadgets.jpg",
+                  onPressed: () {}),
+              headerCategoryItem('Gifts', "assets/images/gifts.jpg",
+                  onPressed: () {}),
             ],
           ),
         )
@@ -30,28 +31,35 @@ class CategoriesBtns extends StatelessWidget {
     );
   }
 
-  Widget headerCategoryItem(String name, IconData icon, {onPressed}) {
+  Widget headerCategoryItem(String name, String imgUrl, {onPressed}) {
     return Container(
-      margin: EdgeInsets.only(top: 2, left: 15),
+      margin: EdgeInsets.only(top: 2, right: 10, left: 10, bottom: 4),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-              margin: EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
+          Stack(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  print("Container clicked");
+                },
+                child: new Container(
+                  width: 70.0,
+                  height: 70.0,
+                  margin: EdgeInsets.only(bottom: 5),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                          // fit: BoxFit.cover, image: new NetworkImage(imgUrl))),
+                          fit: BoxFit.cover,
+                          image: new AssetImage(imgUrl))),
+                ),
               ),
-              // width: 86,
-              // height: 86,
-              child: FloatingActionButton(
-                shape: CircleBorder(),
-                elevation: 2.0,
-                heroTag: name,
-                onPressed: onPressed,
-                backgroundColor: Colors.white,
-                child: Icon(icon, size: 35, color: Colors.black87),
-              )),
+            ],
+          ),
+
           // Text(name + ' ›', style: categoryText)
           Text(name + ' ›')
         ],

@@ -12,7 +12,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-
+//sha1 = AD:49:BC:5E:F5:29:49:19:3E:4F:FC:EC:B4:74:AA:85:AC:26:DB:44
 allprojects {
     repositories {
         google()

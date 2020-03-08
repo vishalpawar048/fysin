@@ -43,18 +43,14 @@ class Banner with ChangeNotifier {
 }
 
 class _HomeSliderState extends State<HomeSlider> {
-  // final List<String> imgList = [];
   final List imgList = [];
   List banners;
   Map bannerImgsObj;
 
   Future<List> getBanner() async {
-    //final response = await http.get('$BASE_URL/banners/getBanners/');
-    //00  var keyword;
     final response = await http.post('$BASE_URL/banners/getBanners/', body: {
       'type': "Sliding",
     });
-
     if (response.statusCode == 200) {
       bannerImgsObj = json.decode(response.body);
       banners = bannerImgsObj["Banners"];
@@ -66,8 +62,11 @@ class _HomeSliderState extends State<HomeSlider> {
           imageUrl: data['imgUrl'][0],
         ));
       });
+    } else {
+      print("$response");
     }
     //print(">>>>>>>>>>${json.decode(productsArray[0])}");
+
     return imgList;
   }
 
@@ -77,34 +76,38 @@ class _HomeSliderState extends State<HomeSlider> {
       child: FutureBuilder(
           future: getBanner(),
           builder: (context, AsyncSnapshot snapshot) {
-            return CarouselSlider(
-              autoPlay: true,
-              pauseAutoPlayOnTouch: Duration(seconds: 10),
-              height: 200.0,
-              viewportFraction: 1.0,
-              items: imgList.map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/products',
-                                arguments: ScreenArguments(i.keyword));
-                          },
-                          child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: i.imageUrl,
-                            placeholder: (context, url) =>
-                                Center(child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) =>
-                                new Icon(Icons.error),
-                          ),
-                        ));
-                  },
-                );
-              }).toList(),
-            );
+            if (snapshot.data == null) {
+              return Container();
+            } else {
+              return CarouselSlider(
+                autoPlay: true,
+                pauseAutoPlayOnTouch: Duration(seconds: 10),
+                height: 200.0,
+                viewportFraction: 1.0,
+                items: imgList.map((i) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/products',
+                                  arguments: ScreenArguments(i.keyword));
+                            },
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: i.imageUrl,
+                              placeholder: (context, url) =>
+                                  Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) =>
+                                  new Icon(Icons.error),
+                            ),
+                          ));
+                    },
+                  );
+                }).toList(),
+              );
+            }
           }),
     );
   }

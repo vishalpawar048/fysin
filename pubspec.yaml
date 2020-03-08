@@ -41,6 +41,7 @@ dependencies:
   google_sign_in: ^4.1.1
   font_awesome_flutter: ^8.5.0
   shared_preferences: ^0.5.6+1
+  webview_flutter: ^0.3.19+9
   # cached_network_image: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -82,6 +83,12 @@ flutter:
     - assets/images/banner-2.png
     - assets/images/loading.gif
     - assets/images/loading_1.gif
+    - assets/images/new.jpg
+    - assets/images/men.jpg
+    - assets/images/women.jpg
+    - assets/images/gadgets.jpg
+    - assets/images/gifts.jpg
+
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/assets-and-images/#resolution-aware.
     # For details regarding adding assets from package dependencies, see
