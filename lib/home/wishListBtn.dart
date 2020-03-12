@@ -9,6 +9,7 @@ class WishListBtn extends StatelessWidget {
           constraints: BoxConstraints.tight(Size(36, 36)),
           shape: new CircleBorder(),
           fillColor: Colors.pink[100],
+          // fillColor: Color(0xffCE107C),
           elevation: 0.0,
           child: Icon(
             Icons.favorite,

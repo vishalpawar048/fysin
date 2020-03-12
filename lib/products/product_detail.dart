@@ -38,14 +38,14 @@ class ProductDetails extends StatelessWidget {
       }
     }
 
-    _launchURL() async {
-      final String url = product.url;
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'Could not launch $url';
-      }
-    }
+    // _launchURL() async {
+    //   final String url = product.url;
+    //   if (await canLaunch(url)) {
+    //     await launch(url);
+    //   } else {
+    //     throw 'Could not launch $url';
+    //   }
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -68,17 +68,17 @@ class ProductDetails extends StatelessWidget {
                   return Builder(
                     builder: (BuildContext context) {
                       return Container(
-                          width: MediaQuery.of(context).size.width,
+                          // width: MediaQuery.of(context).size.width,
                           child: InkWell(
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: i,
-                              placeholder: (context, url) =>
-                                  Center(child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) =>
-                                  new Icon(Icons.error),
-                            ),
-                          ));
+                        child: CachedNetworkImage(
+                          // fit: BoxFit.cover,
+                          imageUrl: i,
+                          placeholder: (context, url) =>
+                              Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) =>
+                              new Icon(Icons.error),
+                        ),
+                      ));
                     },
                   );
                 }).toList(),

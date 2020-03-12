@@ -94,10 +94,12 @@ class Auth extends StatelessWidget {
     AuthBlock auth = Provider.of<AuthBlock>(context);
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Colors.pink[100],
         body: Center(
           child: auth.isLoggedIn
               ? null
               : Container(
+                  margin: const EdgeInsets.only(bottom: 1.0),
                   width: 250.0,
                   child: Align(
                     alignment: Alignment.center,

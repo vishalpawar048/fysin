@@ -32,7 +32,12 @@ class ProductCard extends StatelessWidget {
       String imageUrl = product.imageUrls[0];
       String price = product.price;
       return Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         child: InkWell(
+          borderRadius: BorderRadius.circular(10.0),
           onTap: () {
             Navigator.push(
               context,
@@ -51,9 +56,15 @@ class ProductCard extends StatelessWidget {
           child: Stack(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              FadeInImage.assetNetwork(
-                placeholder: 'assets/images/loading_1.gif',
-                image: imageUrl,
+              Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/images/loading_1.gif',
+                    fit: BoxFit.cover,
+                    image: imageUrl,
+                  ),
+                ),
               ),
               Positioned(
                   right: 1.0,
@@ -67,17 +78,17 @@ class ProductCard extends StatelessWidget {
                       checkLogin();
                     },
                   )),
-              Positioned(
-                  left: 10.0,
-                  bottom: 10.0,
-                  child: Text(
-                    '₹ $price',
-                    textAlign: TextAlign.right,
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
-                    ),
-                  ))
+              // Positioned(
+              //     left: 10.0,
+              //     bottom: 10.0,
+              //     child: Text(
+              //       '₹ $price',
+              //       textAlign: TextAlign.right,
+              //       style: new TextStyle(
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 15.0,
+              //       ),
+              //     ))
             ],
           ),
         ),

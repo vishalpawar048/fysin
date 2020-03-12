@@ -25,8 +25,8 @@ class ProductGrid extends StatelessWidget {
           child: ProductCard(productsArray[i]),
         ),
         staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-        mainAxisSpacing: 0.0,
-        crossAxisSpacing: 0.0,
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
       );
     } else {
       if (productType == "wishlist") {

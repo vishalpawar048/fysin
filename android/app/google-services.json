@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "885767877817",
+    "firebase_url": "https://wishlist-app-a6894.firebaseio.com",
+    "project_id": "wishlist-app-a6894",
+    "storage_bucket": "wishlist-app-a6894.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885767877817:android:7b6d73fbbc5ce28bc49768",
+        "android_client_info": {
+          "package_name": "com.bruhh.bruhh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885767877817-efjianq4g0aon2nlhka7e6e406u5d5hm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzz9k_nspGhpyR-JJ1Znt3-QRnTCKTL_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885767877817-efjianq4g0aon2nlhka7e6e406u5d5hm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

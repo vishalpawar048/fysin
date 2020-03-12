@@ -75,7 +75,10 @@ class Products extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+
     var keyword = args.keyword;
+    var category = args.category;
+    var subCategory = args.subCategory;
 
     Future<List> fetchProducts() async {
       List wishlistIds;
@@ -85,11 +88,14 @@ class Products extends StatelessWidget {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final String emailId = prefs.getString('emailId') ?? "false";
       final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-
-      final response =
-          await http.post('$BASE_URL/products/getProductsByKeyWords/', body: {
-        'keyword': keyword,
-      });
+      var response;
+      if (category == null) {
+        response = await http.post('$BASE_URL/products/getProductsByKeyWords/',
+            body: {'keyword': keyword});
+      } else {
+        response = await http.post('$BASE_URL/products/getProductsByCategory/',
+            body: {'category': category, "subCategory": subCategory});
+      }
 
       if (response.statusCode == 200) {
         products = json.decode(response.body)['Product'];

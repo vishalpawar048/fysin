@@ -16,14 +16,18 @@ class HomeSlider extends StatefulWidget {
 class ScreenArguments {
   //final String id;
   final String keyword;
+  final String category;
+  final String subCategory;
 
-  ScreenArguments(this.keyword);
+  ScreenArguments(this.keyword, this.category, this.subCategory);
 }
 
 class Banner with ChangeNotifier {
   final String id;
   final String keyword;
   final String imageUrl;
+  final String subCategory;
+  final String category;
   // final String description;
   // final int price;
   // final String imageUrl;
@@ -34,6 +38,9 @@ class Banner with ChangeNotifier {
     @required this.id,
     @required this.keyword,
     @required this.imageUrl,
+    @required this.subCategory,
+    @required this.category,
+
     // @required this.description,
     // @required this.price,
     // @required this.imageUrl,
@@ -59,6 +66,8 @@ class _HomeSliderState extends State<HomeSlider> {
         imgList.add(Banner(
           id: data['_id'],
           keyword: data['keyword'],
+          category: data['category'],
+          subCategory: data['subCategory'],
           imageUrl: data['imgUrl'][0],
         ));
       });
@@ -92,7 +101,8 @@ class _HomeSliderState extends State<HomeSlider> {
                           child: InkWell(
                             onTap: () {
                               Navigator.pushNamed(context, '/products',
-                                  arguments: ScreenArguments(i.keyword));
+                                  arguments: ScreenArguments(
+                                      '', i.category, i.subCategory));
                             },
                             child: CachedNetworkImage(
                               fit: BoxFit.cover,

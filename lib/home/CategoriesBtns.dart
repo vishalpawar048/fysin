@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/home/fryo_icons.dart';
+import 'package:flutter_scaffold/home/slider.dart';
 
 class CategoriesBtns extends StatelessWidget {
   @override
@@ -14,15 +15,20 @@ class CategoriesBtns extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             children: <Widget>[
-              headerCategoryItem('New', "assets/images/new.jpg",
+              headerCategoryItem(
+                'New',
+                "assets/images/new.jpg",
+                context,
+                onPressed: () {},
+              ),
+              headerCategoryItem('Men', "assets/images/men.jpg", context,
                   onPressed: () {}),
-              headerCategoryItem('Men', "assets/images/men.jpg",
+              headerCategoryItem('Women', "assets/images/women.jpg", context,
                   onPressed: () {}),
-              headerCategoryItem('Women', "assets/images/women.jpg",
+              headerCategoryItem(
+                  'Gadgets', "assets/images/gadgets.jpg", context,
                   onPressed: () {}),
-              headerCategoryItem('Gadgets', "assets/images/gadgets.jpg",
-                  onPressed: () {}),
-              headerCategoryItem('Gifts', "assets/images/gifts.jpg",
+              headerCategoryItem('Gifts', "assets/images/gifts.jpg", context,
                   onPressed: () {}),
             ],
           ),
@@ -31,7 +37,7 @@ class CategoriesBtns extends StatelessWidget {
     );
   }
 
-  Widget headerCategoryItem(String name, String imgUrl, {onPressed}) {
+  Widget headerCategoryItem(String name, String imgUrl, context, {onPressed}) {
     return Container(
       margin: EdgeInsets.only(top: 2, right: 10, left: 10, bottom: 4),
       child: Column(
@@ -42,7 +48,8 @@ class CategoriesBtns extends StatelessWidget {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  print("Container clicked");
+                  Navigator.pushNamed(context, '/products',
+                      arguments: ScreenArguments(null, name, ''));
                 },
                 child: new Container(
                   width: 70.0,
