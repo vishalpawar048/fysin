@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_scaffold/home/fryo_icons.dart';
 import 'package:flutter_scaffold/home/slider.dart';
 
 class CategoriesBtns extends StatelessWidget {

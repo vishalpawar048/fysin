@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/home/slider.dart';
-import 'package:flutter_scaffold/localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-// import 'drawer.dart';
-// import 'slider.dart';
 
 class HomePageBanners extends StatelessWidget {
   final List<List> imgList = [
@@ -192,15 +188,6 @@ class HomePageBanners extends StatelessWidget {
                       'https://image.shutterstock.com/image-vector/summer-sale-background-layout-banners-260nw-678851590.jpg'),
                 ),
               )),
-          // child: Padding(
-          //   padding:
-          //       EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0, bottom: 10),
-          //   child: Image(
-          //     fit: BoxFit.cover,
-          //     image: NetworkImage(
-          //         'https://image.shutterstock.com/image-vector/summer-sale-background-layout-banners-260nw-678851590.jpg'),
-          //   ),
-          // ),
         )
       ],
     );

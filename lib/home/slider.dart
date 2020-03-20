@@ -28,11 +28,6 @@ class Banner with ChangeNotifier {
   final String imageUrl;
   final String subCategory;
   final String category;
-  // final String description;
-  // final int price;
-  // final String imageUrl;
-  // final String website;
-  // bool isFavorite;
 
   Banner({
     @required this.id,
@@ -40,12 +35,6 @@ class Banner with ChangeNotifier {
     @required this.imageUrl,
     @required this.subCategory,
     @required this.category,
-
-    // @required this.description,
-    // @required this.price,
-    // @required this.imageUrl,
-    // @required this.website,
-    // this.isFavorite = false,
   });
 }
 

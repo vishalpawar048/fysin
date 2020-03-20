@@ -1,28 +1,20 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/blocks/auth_block.dart';
 import 'package:flutter_scaffold/products/products.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'package:smooth_star_rating/smooth_star_rating.dart';
-import 'package:url_launcher/url_launcher.dart';
-import './productCard.dart';
-import '../auth/auth.dart';
-//import 'package:smooth_star_rating/smooth_star_rating.dart';
-
 class ProductDetails extends StatelessWidget {
-  // final Product product;
-  // ProductDetails(this.product);
-
   @override
   Widget build(BuildContext context) {
-    //bool isFavorite = false;
     bool isLoggedIn = false;
     AuthBlock auth = Provider.of<AuthBlock>(context);
-    // Product product = ModalRoute.of(context).settings.arguments;
     Product product = Provider.of<Product>(context);
 
     Future checkLogin() async {
@@ -38,19 +30,11 @@ class ProductDetails extends StatelessWidget {
       }
     }
 
-    // _launchURL() async {
-    //   final String url = product.url;
-    //   if (await canLaunch(url)) {
-    //     await launch(url);
-    //   } else {
-    //     throw 'Could not launch $url';
-    //   }
-    // }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Product Details'),
         elevation: 0.0,
+        backgroundColor: Colors.pink[300],
       ),
       body: SafeArea(
         top: false,
@@ -87,59 +71,138 @@ class ProductDetails extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Column(
                   children: <Widget>[
-                    Container(
-                      alignment: Alignment(-1.0, -1.0),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 15, bottom: 15),
-                        child: Text(
-                          product.name,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          child: Container(
+                            alignment: Alignment(-1.0, -1.0),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 15, bottom: 15),
+                              child: Text(
+                                product.name,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        Container(
+                          height: 40,
+                          width: 40,
+                          margin: EdgeInsets.only(right: 6),
+                          child: Center(
+                              child: IconButton(
+                                  //  padding: EdgeInsets.only(right: 10),
+                                  icon: Icon(
+                                    Icons.share,
+                                    color: Colors.pink[300],
+                                  ),
+                                  onPressed: () => share(
+                                      context,
+                                      ShareMsg(
+                                          url: "https://bruhh.page.link/c2Sd",
+                                          appLink:
+                                              "\n Your friend has suggested a link to check out" +
+                                                  product.url)))),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFEFEDEE),
+                            borderRadius: BorderRadius.circular(10.0),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.pink[300],
+                                  offset: Offset(0.0, 4),
+                                  blurRadius: 10.0)
+                            ],
+                          ),
+                        )
+                        // IconButton(
+                        //     // padding: EdgeInsets.only(right: 10),
+                        //     icon: Icon(
+                        //       Icons.share,
+                        //       color: Colors.pink[300],
+                        //     ),
+                        //     onPressed: () => share(
+                        //         context,
+                        //         ShareMsg(
+                        //             url: "https://bruhh.page.link/c2Sd",
+                        //             appLink:
+                        //                 "\n Your friend suggested a link to check out" +
+                        //                     product.url)))
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 25),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.only(right: 10.0),
+                                padding: EdgeInsets.only(left: 1),
+                                child: Text('₹ ${product.price}',
+                                    style: TextStyle(
+                                      color: Colors.pink[300],
+                                      fontSize: 16,
+                                      // decoration: TextDecoration.lineThrough
+                                    )),
                               ),
-                              Text('₹ ${product.price}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    // decoration: TextDecoration.lineThrough
-                                  )),
+                              Row(
+                                children: <Widget>[
+                                  Text('* Price may varies',
+                                      style: TextStyle(
+                                        color: Colors.black,
+
+                                        fontSize: 10,
+                                        // decoration: TextDecoration.lineThrough
+                                      )),
+                                ],
+                              ),
                             ],
                           ),
                           Row(
                             children: <Widget>[
                               Text('${product.website}',
                                   style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    // decoration: TextDecoration.lineThrough
-                                  )),
+                                      fontFamily: 'DancingScript',
+                                      color: Colors.pink[300],
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600
+                                      // decoration: TextDecoration.lineThrough
+                                      )),
                             ],
                           ),
                           Row(children: <Widget>[
                             IconButton(
                               icon: product.isFavorite
-                                  ? Icon(Icons.favorite, color: Colors.pink)
-                                  : Icon(
-                                      Icons.favorite_border,
-                                    ),
+                                  ? Icon(Icons.favorite,
+                                      color: Colors.pink[300])
+                                  : Icon(Icons.favorite_border,
+                                      color: Colors.pink),
                               color: Theme.of(context).accentColor,
                               onPressed: () {
                                 checkLogin();
                               },
                             ),
+                            // Container(
+                            //   height: 50,
+                            //   width: 50,
+                            //   child: Icon(Icons.favorite, color: Colors.pink),
+                            //   decoration: BoxDecoration(
+                            //     color: Color(0xFFEFEDEE),
+                            //     borderRadius: BorderRadius.circular(10.0),
+                            //     boxShadow: [
+                            //       BoxShadow(
+                            //           color: Colors.black54,
+                            //           offset: Offset(0.0, 4),
+                            //           blurRadius: 10.0)
+                            //     ],
+                            //   ),
+                            // )
                           ]),
 //
                         ],
@@ -169,19 +232,51 @@ class ProductDetails extends StatelessWidget {
                                     color: Colors.black, fontSize: 16),
                               ),
                             )),
-                        Container(
-                            child: Center(
-                                child: new RaisedButton(
-                          color: Colors.green,
-                          // onPressed: _launchURL,
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) => WebPage(
-                                      selectedUrl: product.url,
-                                    )));
-                          },
-                          child: new Text('Buy Now'),
-                        ))),
+                        Row(mainAxisAlignment: MainAxisAlignment.center,
+                            // crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              // Container(
+                              //     child: Center(
+                              //         child: new RaisedButton(
+                              //   color: Colors.pink[300],
+                              //   elevation: 50,
+                              //   // onPressed: _launchURL,
+                              //   onPressed: () {
+                              //     Navigator.of(context).push(MaterialPageRoute(
+                              //         builder: (BuildContext context) =>
+                              //             WebPage(
+                              //               selectedUrl: product.url,
+                              //             )));
+                              //   },
+                              //   child: new Text('Buy Now'),
+                              // ))),
+                              Container(
+                                height: 45,
+                                width: 130,
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: Center(
+                                  child: Text(
+                                    "Buy Now..",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.pink[300],
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        // color: Colors.black54,
+                                        color: Colors.pink[300],
+                                        // color: Colors.black54,
+                                        offset: Offset(0.0, 4),
+                                        blurRadius: 10.0)
+                                  ],
+                                ),
+                              )
+                            ]),
                       ],
                     ),
                   ],
@@ -193,6 +288,21 @@ class ProductDetails extends StatelessWidget {
       ),
     );
   }
+}
+
+class ShareMsg {
+  String url;
+  String appLink;
+
+  ShareMsg({@required this.url, @required this.appLink});
+}
+
+share(BuildContext context, ShareMsg msg) {
+  final RenderBox box = context.findRenderObject();
+
+  Share.share("${msg.url} - ${msg.appLink}",
+      subject: "bruhh",
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
 }
 
 class WebPage extends StatelessWidget {

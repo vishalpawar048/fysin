@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_scaffold/config.dart';
 import 'package:flutter_scaffold/products/product_detail.dart';
 import 'package:flutter_scaffold/products/products.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +15,8 @@ class ProductArg {
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  ProductCard(this.product);
+  final emailId;
+  ProductCard(this.product, this.emailId);
 
   Widget _buildImageWidget(context) {
     Product product = Provider.of<Product>(context);
@@ -26,6 +31,37 @@ class ProductCard extends StatelessWidget {
       } else {
         return Navigator.pushNamed(context, '/auth', arguments: "");
       }
+    }
+
+    deleteProduct(id) async {
+      // var response = await http
+      //     .post('$BASE_URL/products/deleteProduct/', body: {'id': id});
+      // print(">>>>>>>>>>>>>>>>>>>>>>");
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete Product'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('Delete'),
+                onPressed: () async {
+                  await http.post('$BASE_URL/products/deleteProduct/', body: {
+                    'id': id
+                  }).then((value) => Navigator.of(context).pop());
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
 
     if (product.imageUrls[0] != null && product.imageUrls[0] != '') {
@@ -60,7 +96,7 @@ class ProductCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/images/loading_1.gif',
+                    placeholder: 'assets/images/loading.gif',
                     fit: BoxFit.cover,
                     image: imageUrl,
                   ),
@@ -78,17 +114,20 @@ class ProductCard extends StatelessWidget {
                       checkLogin();
                     },
                   )),
-              // Positioned(
-              //     left: 10.0,
-              //     bottom: 10.0,
-              //     child: Text(
-              //       '₹ $price',
-              //       textAlign: TextAlign.right,
-              //       style: new TextStyle(
-              //         fontWeight: FontWeight.bold,
-              //         fontSize: 15.0,
-              //       ),
-              //     ))
+              emailId == 'vishalpawar048@gmail.com'
+                  ? Positioned(
+                      right: 1.0,
+                      bottom: 1.0,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                        ),
+                        color: Theme.of(context).accentColor,
+                        onPressed: () {
+                          deleteProduct(product.id);
+                        },
+                      ))
+                  : Container()
             ],
           ),
         ),

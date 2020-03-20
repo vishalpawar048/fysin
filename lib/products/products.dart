@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config.dart';
 import '../home/wishListBtn.dart';
-import '../shop/search.dart';
+import '../home/search.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import './productGrid.dart';
@@ -79,6 +79,7 @@ class Products extends StatelessWidget {
     var keyword = args.keyword;
     var category = args.category;
     var subCategory = args.subCategory;
+    var emailId;
 
     Future<List> fetchProducts() async {
       List wishlistIds;
@@ -86,7 +87,7 @@ class Products extends StatelessWidget {
       List products;
       final List productsArray = [];
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String emailId = prefs.getString('emailId') ?? "false";
+      emailId = prefs.getString('emailId') ?? "false";
       final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
       var response;
       if (category == null) {
@@ -144,7 +145,9 @@ class Products extends StatelessWidget {
                       child: Text(
                           "Something went wrong. Please try after some time.."));
                 return ProductGrid(
-                    productsArray: snapshot.data, productType: 'product');
+                    productsArray: snapshot.data,
+                    productType: 'product',
+                    emailId: emailId);
             } // unreachable
           }),
     );

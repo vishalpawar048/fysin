@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/products/products.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './productCard.dart';
 
 class ProductGrid extends StatelessWidget {
-  ProductGrid({this.productsArray, this.productType});
+  final emailId;
+
+  ProductGrid({this.productsArray, this.productType, this.emailId});
 
   final List productsArray;
   final String productType;
@@ -22,7 +25,7 @@ class ProductGrid extends StatelessWidget {
         itemBuilder: (ctx, i) => ChangeNotifierProvider<Product>.value(
           // builder: (c) => products[i],
           value: productsArray[i],
-          child: ProductCard(productsArray[i]),
+          child: ProductCard(productsArray[i], emailId),
         ),
         staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
         mainAxisSpacing: 4.0,
