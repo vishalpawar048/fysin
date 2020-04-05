@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_scaffold/config.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_scaffold/products/products.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:cache_image/cache_image.dart';
 
 class ProductArg {
   Product product;
@@ -34,9 +34,6 @@ class ProductCard extends StatelessWidget {
     }
 
     deleteProduct(id) async {
-      // var response = await http
-      //     .post('$BASE_URL/products/deleteProduct/', body: {'id': id});
-      // print(">>>>>>>>>>>>>>>>>>>>>>");
       return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -66,7 +63,6 @@ class ProductCard extends StatelessWidget {
 
     if (product.imageUrls[0] != null && product.imageUrls[0] != '') {
       String imageUrl = product.imageUrls[0];
-      String price = product.price;
       return Card(
         elevation: 2,
         shape: RoundedRectangleBorder(
@@ -95,11 +91,25 @@ class ProductCard extends StatelessWidget {
               Container(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
-                  child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/images/loading.gif',
-                    fit: BoxFit.cover,
-                    image: imageUrl,
-                  ),
+                  child: FadeInImage(
+                      fit: BoxFit.cover,
+                      placeholder: AssetImage('assets/images/loading.gif'),
+                      // placeholder: AssetImage('assets/placeholder.png'),
+                      // placeholder: (context, url) => Center(
+                      //           child: CircularProgressIndicator(
+                      //         backgroundColor: Colors.pink[300],
+                      //         valueColor: new AlwaysStoppedAnimation<Color>(
+                      //             Colors.lightBlue),
+                      //       )),
+                      image: CacheImage(
+                        imageUrl,
+                      )),
+                  // child: CachedNetworkImage(imageUrl: CacheImage(imageUrl)),
+                  // child: FadeInImage.assetNetwork(
+                  //   placeholder: 'assets/images/loading.gif',
+                  //   fit: BoxFit.cover,
+                  //   image: imageUrl,
+                  // ),
                 ),
               ),
               Positioned(
@@ -141,40 +151,40 @@ class ProductCard extends StatelessWidget {
     }
   }
 
-  Widget _buildTitleWidget() {
-    if (product.name != null && product.name != '') {
-      return Text(
-        product.name,
-        style: TextStyle(fontWeight: FontWeight.bold),
-      );
-    } else {
-      return SizedBox();
-    }
-  }
+  // Widget _buildTitleWidget() {
+  //   if (product.name != null && product.name != '') {
+  //     return Text(
+  //       product.name,
+  //       style: TextStyle(fontWeight: FontWeight.bold),
+  //     );
+  //   } else {
+  //     return SizedBox();
+  //   }
+  // }
 
-  Widget _buildPriceWidget() {
-    if (product.price != null && product.price != '') {
-      return Text("\$ ${product.price}");
-    } else {
-      return SizedBox();
-    }
-  }
+  // Widget _buildPriceWidget() {
+  //   if (product.price != null && product.price != '') {
+  //     return Text("\$ ${product.price}");
+  //   } else {
+  //     return SizedBox();
+  //   }
+  // }
 
-  Widget _buildLocationWidget() {
-    if (product.website != null && product.website != '') {
-      return Row(
-        children: <Widget>[
-          Icon(Icons.location_on),
-          SizedBox(
-            width: 4.0,
-          ),
-          Expanded(child: Text(product.website))
-        ],
-      );
-    } else {
-      return SizedBox();
-    }
-  }
+  // Widget _buildLocationWidget() {
+  //   if (product.website != null && product.website != '') {
+  //     return Row(
+  //       children: <Widget>[
+  //         Icon(Icons.location_on),
+  //         SizedBox(
+  //           width: 4.0,
+  //         ),
+  //         Expanded(child: Text(product.website))
+  //       ],
+  //     );
+  //   } else {
+  //     return SizedBox();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_scaffold/home/CarouselBanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config.dart';
@@ -7,7 +9,6 @@ import '../home/search.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import './productGrid.dart';
-import '../home/slider.dart';
 
 import 'package:flutter/foundation.dart';
 
@@ -40,34 +41,41 @@ class Product with ChangeNotifier {
   Future<void> toggleWishlistStatus(emailId, id) async {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
+    var fcmToken;
     notifyListeners();
-    if (isFavorite) {
-      try {
-        final response =
-            await http.post('$BASE_URL/wishlist/addToWishlist', body: {
-          'emailId': emailId,
-          'productId': id,
-        });
-        if (response.statusCode >= 400) {
+    FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+    _firebaseMessaging.getToken().then((token) async {
+      fcmToken = token;
+      if (isFavorite) {
+        try {
+          final response =
+              await http.post('$BASE_URL/wishlist/addToWishlist', body: {
+            'fcmToken': fcmToken,
+            'emailId': emailId,
+            'productId': id,
+          });
+          if (response.statusCode >= 400) {
+            _setFavValue(oldStatus);
+          }
+        } catch (error) {
           _setFavValue(oldStatus);
         }
-      } catch (error) {
-        _setFavValue(oldStatus);
-      }
-    } else {
-      try {
-        final response =
-            await http.post('$BASE_URL/wishlist/removefromWishlist', body: {
-          'emailId': emailId,
-          'productId': id,
-        });
-        if (response.statusCode >= 400) {
+      } else {
+        try {
+          final response =
+              await http.post('$BASE_URL/wishlist/removefromWishlist', body: {
+            'fcmToken': fcmToken,
+            'emailId': emailId,
+            'productId': id,
+          });
+          if (response.statusCode >= 400) {
+            _setFavValue(oldStatus);
+          }
+        } catch (error) {
           _setFavValue(oldStatus);
         }
-      } catch (error) {
-        _setFavValue(oldStatus);
       }
-    }
+    });
   }
 }
 
@@ -82,7 +90,7 @@ class Products extends StatelessWidget {
     var emailId;
 
     Future<List> fetchProducts() async {
-      List wishlistIds;
+      // List wishlistIds;
       List wishlistArray = [];
       List products;
       final List productsArray = [];
@@ -138,7 +146,12 @@ class Products extends StatelessWidget {
                 );
               case ConnectionState.active:
               case ConnectionState.waiting:
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                    child: CircularProgressIndicator(
+                  backgroundColor: Colors.pink[300],
+                  valueColor:
+                      new AlwaysStoppedAnimation<Color>(Colors.lightBlue),
+                ));
               case ConnectionState.done:
                 if (snapshot.hasError)
                   return Center(

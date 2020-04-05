@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_scaffold/auth/auth.dart';
 import 'package:flutter_scaffold/blocks/auth_block.dart';
-import './home/categorise.dart';
 import 'package:flutter_scaffold/home/home.dart';
 import './products/product_detail.dart';
 import 'package:flutter_scaffold/wishlist.dart';
@@ -28,7 +26,7 @@ void main() {
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => Home(),
         '/auth': (BuildContext context) => Auth(),
-        '/categorise': (BuildContext context) => Categorise(),
+        // '/categorise': (BuildContext context) => Categorise(),
         '/products': (BuildContext context) => Products(),
         '/productDetails': (BuildContext context) => ProductDetails(),
         '/products': (BuildContext context) => Products(),

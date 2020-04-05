@@ -1,20 +1,17 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_scaffold/blocks/auth_block.dart';
 import 'package:flutter_scaffold/products/products.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:carousel_pro/carousel_pro.dart';
 
 class ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLoggedIn = false;
-    AuthBlock auth = Provider.of<AuthBlock>(context);
     Product product = Provider.of<Product>(context);
 
     Future checkLogin() async {
@@ -35,6 +32,21 @@ class ProductDetails extends StatelessWidget {
         title: Text('Product Details'),
         elevation: 0.0,
         backgroundColor: Colors.pink[300],
+        actions: <Widget>[
+          IconButton(
+              //  padding: EdgeInsets.only(right: 10),
+              icon: Icon(
+                Icons.share,
+                color: Colors.white,
+              ),
+              onPressed: () => share(
+                  context,
+                  ShareMsg(
+                      url: "https://bruhh.page.link/bruhh",
+                      appLink:
+                          "\n Hey, Your friend has suggested a link to check out " +
+                              product.url))),
+        ],
       ),
       body: SafeArea(
         top: false,
@@ -43,29 +55,66 @@ class ProductDetails extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              CarouselSlider(
-                autoPlay: false,
-                pauseAutoPlayOnTouch: Duration(seconds: 10),
+              // CarouselSlider(
+              //   autoPlay: false,
+              //   pauseAutoPlayOnTouch: Duration(seconds: 10),
+              //   height: 500.0,
+              //   viewportFraction: 1.0,
+              //   items: product.imageUrls.map((i) {
+              //     return Builder(
+              //       builder: (BuildContext context) {
+              //         return Container(
+              //             // width: MediaQuery.of(context).size.width,
+              //             child: InkWell(
+              //           child: CachedNetworkImage(
+              //             // fit: BoxFit.cover,
+              //             imageUrl: i,
+              //             placeholder: (context, url) => Center(
+              //                 child: CircularProgressIndicator(
+              //               backgroundColor: Colors.pink[300],
+              //               valueColor: new AlwaysStoppedAnimation<Color>(
+              //                   Colors.lightBlue),
+              //             )),
+              //             errorWidget: (context, url, error) =>
+              //                 new Icon(Icons.error),
+              //           ),
+              //         ));
+              //       },
+              //     );
+              //   }).toList(),
+              // ),
+              SizedBox(
                 height: 500.0,
-                viewportFraction: 1.0,
-                items: product.imageUrls.map((i) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Container(
-                          // width: MediaQuery.of(context).size.width,
-                          child: InkWell(
-                        child: CachedNetworkImage(
-                          // fit: BoxFit.cover,
-                          imageUrl: i,
-                          placeholder: (context, url) =>
-                              Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) =>
-                              new Icon(Icons.error),
-                        ),
-                      ));
-                    },
-                  );
-                }).toList(),
+                child: Carousel(
+                  autoplay: false,
+                  dotIncreasedColor: Colors.pink[300],
+                  indicatorBgPadding: 5,
+                  // pauseAutoPlayOnTouch: Duration(seconds: 10),
+                  // height: 500.0,
+                  // viewportFraction: 1.0,
+                  images: product.imageUrls.map((i) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                            // width: MediaQuery.of(context).size.width,
+                            child: InkWell(
+                          child: CachedNetworkImage(
+                            // fit: BoxFit.cover,
+                            imageUrl: i,
+                            placeholder: (context, url) => Center(
+                                child: CircularProgressIndicator(
+                              backgroundColor: Colors.pink[300],
+                              valueColor: new AlwaysStoppedAnimation<Color>(
+                                  Colors.lightBlue),
+                            )),
+                            errorWidget: (context, url, error) =>
+                                new Icon(Icons.error),
+                          ),
+                        ));
+                      },
+                    );
+                  }).toList(),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
@@ -90,35 +139,35 @@ class ProductDetails extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          height: 40,
-                          width: 40,
-                          margin: EdgeInsets.only(right: 6),
-                          child: Center(
-                              child: IconButton(
-                                  //  padding: EdgeInsets.only(right: 10),
-                                  icon: Icon(
-                                    Icons.share,
-                                    color: Colors.pink[300],
-                                  ),
-                                  onPressed: () => share(
-                                      context,
-                                      ShareMsg(
-                                          url: "https://bruhh.page.link/c2Sd",
-                                          appLink:
-                                              "\n Your friend has suggested a link to check out" +
-                                                  product.url)))),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFEFEDEE),
-                            borderRadius: BorderRadius.circular(10.0),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.pink[300],
-                                  offset: Offset(0.0, 4),
-                                  blurRadius: 10.0)
-                            ],
-                          ),
-                        )
+                        // Container(
+                        //   height: 40,
+                        //   width: 40,
+                        //   margin: EdgeInsets.only(right: 6),
+                        //   child: Center(
+                        //       child: IconButton(
+                        //           //  padding: EdgeInsets.only(right: 10),
+                        //           icon: Icon(
+                        //             Icons.share,
+                        //             color: Colors.pink[300],
+                        //           ),
+                        //           onPressed: () => share(
+                        //               context,
+                        //               ShareMsg(
+                        //                   url: "https://bruhh.page.link/bruhh",
+                        //                   appLink:
+                        //                       "\n Your friend has suggested a link to check out " +
+                        //                           product.url)))),
+                        //   decoration: BoxDecoration(
+                        //     color: Color(0xFFEFEDEE),
+                        //     borderRadius: BorderRadius.circular(10.0),
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //           color: Colors.pink[300],
+                        //           offset: Offset(0.0, 4),
+                        //           blurRadius: 10.0)
+                        //     ],
+                        //   ),
+                        // )
                         // IconButton(
                         //     // padding: EdgeInsets.only(right: 10),
                         //     icon: Icon(
@@ -254,14 +303,24 @@ class ProductDetails extends StatelessWidget {
                                 height: 45,
                                 width: 130,
                                 margin: EdgeInsets.only(bottom: 10),
-                                child: Center(
-                                  child: Text(
-                                    "Buy Now..",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600),
+                                child: InkWell(
+                                  child: Center(
+                                    child: Text(
+                                      "Buy Now..",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
+                                    ),
                                   ),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                WebPage(
+                                                  selectedUrl: product.url,
+                                                )));
+                                  },
                                 ),
                                 decoration: BoxDecoration(
                                   color: Colors.pink[300],
@@ -311,15 +370,14 @@ class WebPage extends StatelessWidget {
   WebPage({
     @required this.selectedUrl,
   });
-  WebViewController _controller;
+  // WebViewController _controller;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bruhh'),
+        backgroundColor: Colors.pink[300],
       ),
-      // We're using a Builder here so we have a context that is below the Scaffold
-      // to allow calling Scaffold.of(context) so we can show a snackbar.
       body: Builder(builder: (BuildContext context) {
         return WebView(
           initialUrl: selectedUrl,

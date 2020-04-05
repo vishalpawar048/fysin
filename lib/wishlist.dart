@@ -356,7 +356,7 @@ class ShowWishList extends StatelessWidget {
 }
 
 class WishList extends StatelessWidget {
-  var isLoggedIn;
+  var isLoggedIn = false;
 
   Future getAuth() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -371,11 +371,14 @@ class WishList extends StatelessWidget {
       future: getAuth(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return Scaffold(
-            appBar: AppBar(title: const Text('Wishlist'), actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.account_circle),
-                  onPressed: () => CheckLogin(auth, context).checkLogIn()),
-            ]),
+            appBar: AppBar(
+                title: const Text('Wishlist'),
+                backgroundColor: Colors.pink[300],
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.account_circle),
+                      onPressed: () => CheckLogin(auth, context).checkLogIn()),
+                ]),
             body: ShowWishList(
               isLoggedIn: isLoggedIn,
               context: context,

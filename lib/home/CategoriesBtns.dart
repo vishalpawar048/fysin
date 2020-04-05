@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_scaffold/home/slider.dart';
+import 'package:flutter_scaffold/home/CarouselBanner.dart';
 
 class CategoriesBtns extends StatelessWidget {
   @override

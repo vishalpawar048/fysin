@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_scaffold/home/CarouselBanner.dart';
 import 'package:flutter_scaffold/home/CategoriesBtns.dart';
+import 'package:intl/intl.dart';
+import '../config.dart';
 import './search.dart';
 import './wishListBtn.dart';
 import './homePageBanners.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-// import 'drawer.dart';
-import 'slider.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   @override
@@ -26,11 +27,23 @@ class _HomeState extends State<Home> {
 
   void firebaseCloudMessaging_Listeners() {
     if (Platform.isIOS) iOS_Permission();
+    var now = new DateTime.now();
+    _firebaseMessaging.getToken().then((token) async {
+      // final String emailId = prefs.getString('emailId') ?? "false";
 
-    _firebaseMessaging.getToken().then((token) {
-      print(
-        ">>>>>>>>>>>>>>>>>>>>>>>>>$token",
-      );
+      try {
+        final response = await http.post('$BASE_URL/user/saveFcmToken', body: {
+          'fcmToken': token,
+          'date': new DateFormat("dd-MM-yyyy hh:mm:ss").format(now)
+        });
+        if (response.statusCode >= 400) {
+          print("Faild FCM storage $response");
+        } else {
+          print("Success FCM storage $response");
+        }
+      } catch (error) {
+        print("Faild FCM storage $error");
+      }
     });
 
     _firebaseMessaging.configure(

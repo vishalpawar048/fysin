@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_scaffold/home/slider.dart';
+import 'CarouselBanner.dart';
 
 class Search extends StatefulWidget {
   @override

@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  cache_image:
+    dependency: "direct main"
+    description:
+      name: cache_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.5"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -36,6 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0-rc"
+  carousel_pro:
+    dependency: "direct main"
+    description:
+      name: carousel_pro
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   carousel_slider:
     dependency: "direct main"
     description:
@@ -155,6 +169,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.12"
+  firebase_storage:
+    dependency: transitive
+    description:
+      name: firebase_storage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.5"
   flappy_search_bar:
     dependency: "direct main"
     description:
@@ -307,7 +328,21 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.0"
+    version: "1.6.5"
+  path_provider_macos:
+    dependency: transitive
+    description:
+      name: path_provider_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
+  path_provider_platform_interface:
+    dependency: transitive
+    description:
+      name: path_provider_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   pedantic:
     dependency: transitive
     description:
