@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/products/products.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import './productCard.dart';
 
-class ProductGrid extends StatelessWidget {
+class ProductGrid extends StatefulWidget {
   final emailId;
 
   ProductGrid({this.productsArray, this.productType, this.emailId});
@@ -14,25 +14,58 @@ class ProductGrid extends StatelessWidget {
   final String productType;
 
   @override
+  _ProductGridState createState() => _ProductGridState();
+}
+
+class _ProductGridState extends State<ProductGrid> {
+  List<Product> data = [];
+  List<String> img = [];
+  int currentLength = 0;
+
+  final int increment = 20;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    _loadMore();
+    super.initState();
+  }
+
+  Future _loadMore() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    for (var i = currentLength; i <= currentLength + increment; i++) {
+      data.add(widget.productsArray[i]);
+      img.add(widget.productsArray[i].imageUrls[0]);
+    }
+    setState(() {
+      isLoading = false;
+      currentLength = data.length;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (productsArray.length > 0) {
-      return StaggeredGridView.countBuilder(
-        crossAxisCount: 4,
-        itemCount: productsArray.length,
-        // itemBuilder: (BuildContext context, int index) {
-        //   return ProductCard(productsArray[index]);
-        // },
-        itemBuilder: (ctx, i) => ChangeNotifierProvider<Product>.value(
-          // builder: (c) => products[i],
-          value: productsArray[i],
-          child: ProductCard(productsArray[i], emailId),
+    if (widget.productsArray.length > 0) {
+      return LazyLoadScrollView(
+        onEndOfPage: () => _loadMore(),
+        isLoading: isLoading,
+        child: new StaggeredGridView.countBuilder(
+          crossAxisCount: 4,
+          itemCount: data.length,
+          itemBuilder: (ctx, i) => ChangeNotifierProvider<Product>.value(
+            value: data[i],
+            child: ProductCard(img[i], data[i], widget.emailId),
+          ),
+          staggeredTileBuilder: (int index) => new StaggeredTile.count(2, 2.7),
+          mainAxisSpacing: 0.0,
+          crossAxisSpacing: 0.0,
         ),
-        staggeredTileBuilder: (int index) => StaggeredTile.fit(2),
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
       );
     } else {
-      if (productType == "wishlist") {
+      if (widget.productType == "wishlist") {
         return Center(child: Text("Hey! Your wishlist is empty.."));
       } else {
         return Center(child: Text("Sorry! No result available.."));

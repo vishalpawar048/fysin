@@ -7,16 +7,16 @@ import 'package:flutter_scaffold/products/products.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:cache_image/cache_image.dart';
 
 class ProductArg {
   Product product;
 }
 
 class ProductCard extends StatelessWidget {
+  final String img;
   final Product product;
   final emailId;
-  ProductCard(this.product, this.emailId);
+  ProductCard(this.img, this.product, this.emailId);
 
   Widget _buildImageWidget(context) {
     Product product = Provider.of<Product>(context);
@@ -61,87 +61,75 @@ class ProductCard extends StatelessWidget {
       );
     }
 
-    if (product.imageUrls[0] != null && product.imageUrls[0] != '') {
-      String imageUrl = product.imageUrls[0];
-      return Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(10.0),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return ChangeNotifierProvider<Product>.value(
-                    value: product,
-                    child: ProductDetails(),
-                  );
-                },
-              ),
-            );
-            // Navigator.of(context).pushNamed('/productDetails');
-            // Navigator.pushNamed(context, '/productDetails');
-          },
-          child: Stack(
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: FadeInImage(
-                      fit: BoxFit.cover,
-                      placeholder: AssetImage('assets/images/loading.gif'),
-                      // placeholder: AssetImage('assets/placeholder.png'),
-                      // placeholder: (context, url) => Center(
-                      //           child: CircularProgressIndicator(
-                      //         backgroundColor: Colors.pink[300],
-                      //         valueColor: new AlwaysStoppedAnimation<Color>(
-                      //             Colors.lightBlue),
-                      //       )),
-                      image: CacheImage(
-                        imageUrl,
-                      )),
-                  // child: CachedNetworkImage(imageUrl: CacheImage(imageUrl)),
-                  // child: FadeInImage.assetNetwork(
-                  //   placeholder: 'assets/images/loading.gif',
-                  //   fit: BoxFit.cover,
-                  //   image: imageUrl,
-                  // ),
+    if (img != null && img != '') {
+      String imageUrl = img;
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return ChangeNotifierProvider<Product>.value(
+                  value: product,
+                  child: ProductDetails(),
+                );
+              },
+            ),
+          );
+        },
+        child: Stack(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CachedNetworkImage(
+              fit: BoxFit.fill,
+              imageUrl: imageUrl,
+              imageBuilder: (context, imageProvider) => Container(
+                // width: 80.0,
+                // height: 80.0,
+                margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+                decoration: BoxDecoration(
+                  borderRadius: new BorderRadius.all(Radius.circular(10.0)),
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 ),
               ),
-              Positioned(
-                  right: 1.0,
-                  top: 1.0,
-                  child: IconButton(
-                    icon: product.isFavorite
-                        ? Icon(Icons.favorite, color: Colors.pink)
-                        : Icon(Icons.favorite_border, color: Colors.pink),
-                    color: Theme.of(context).accentColor,
-                    onPressed: () {
-                      checkLogin();
-                    },
-                  )),
-              emailId == 'vishalpawar048@gmail.com'
-                  ? Positioned(
-                      right: 1.0,
-                      bottom: 1.0,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                        ),
-                        color: Theme.of(context).accentColor,
-                        onPressed: () {
-                          deleteProduct(product.id);
-                        },
-                      ))
-                  : Container()
-            ],
-          ),
+              placeholder: (context, url) => Center(
+                  child: CircularProgressIndicator(
+                backgroundColor: Colors.pink[300],
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.lightBlue),
+              )),
+            ),
+            Positioned(
+                right: 10.0,
+                top: 1.0,
+                child: IconButton(
+                  icon: product.isFavorite
+                      ? Icon(Icons.favorite, color: Colors.pink)
+                      : Icon(Icons.favorite_border, color: Colors.pink),
+                  color: Theme.of(context).accentColor,
+                  onPressed: () {
+                    checkLogin();
+                  },
+                )),
+            emailId == 'vishalpawar048@gmail.com' ||
+                    emailId == 'bruhhdevteam@gmail.com'
+                ? Positioned(
+                    right: 3.0,
+                    bottom: 15.0,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                      ),
+                      color: Theme.of(context).accentColor,
+                      onPressed: () {
+                        deleteProduct(product.id);
+                      },
+                    ))
+                : Container()
+          ],
         ),
       );
+
       // return
     } else {
       return FadeInImage.memoryNetwork(
@@ -150,41 +138,6 @@ class ProductCard extends StatelessWidget {
       );
     }
   }
-
-  // Widget _buildTitleWidget() {
-  //   if (product.name != null && product.name != '') {
-  //     return Text(
-  //       product.name,
-  //       style: TextStyle(fontWeight: FontWeight.bold),
-  //     );
-  //   } else {
-  //     return SizedBox();
-  //   }
-  // }
-
-  // Widget _buildPriceWidget() {
-  //   if (product.price != null && product.price != '') {
-  //     return Text("\$ ${product.price}");
-  //   } else {
-  //     return SizedBox();
-  //   }
-  // }
-
-  // Widget _buildLocationWidget() {
-  //   if (product.website != null && product.website != '') {
-  //     return Row(
-  //       children: <Widget>[
-  //         Icon(Icons.location_on),
-  //         SizedBox(
-  //           width: 4.0,
-  //         ),
-  //         Expanded(child: Text(product.website))
-  //       ],
-  //     );
-  //   } else {
-  //     return SizedBox();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
