@@ -17,10 +17,8 @@ void main() {
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // primaryColor: Colors.deepOrange[500],
         primaryColor: Colors.white,
         accentColor: Colors.black,
-        //hintColor: Color(0xffbfc2c5),
       ),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
@@ -29,7 +27,7 @@ void main() {
         // '/categorise': (BuildContext context) => Categorise(),
         '/products': (BuildContext context) => Products(),
         '/productDetails': (BuildContext context) => ProductDetails(),
-        '/products': (BuildContext context) => Products(),
+        // '/products': (BuildContext context) => Products(),
         '/wishList': (BuildContext context) => WishList(),
       },
     ),

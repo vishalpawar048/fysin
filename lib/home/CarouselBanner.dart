@@ -61,6 +61,8 @@ class _HomeSliderState extends State<HomeSlider> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // margin: EdgeInsets.only(top: 15),
+      margin: EdgeInsets.only(top: 15, left: 5, right: 5),
       child: FutureBuilder(
           future: getBanner(),
           builder: (context, AsyncSnapshot snapshot) {
@@ -76,25 +78,34 @@ class _HomeSliderState extends State<HomeSlider> {
                   return Builder(
                     builder: (BuildContext context) {
                       return Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/products',
-                                  arguments: ScreenArguments('', i[1], i[2]));
-                            },
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: i[0],
-                              placeholder: (context, url) => Center(
-                                  child: CircularProgressIndicator(
-                                backgroundColor: Colors.pink[300],
-                                valueColor: new AlwaysStoppedAnimation<Color>(
-                                    Colors.lightBlue),
-                              )),
-                              errorWidget: (context, url, error) =>
-                                  new Icon(Icons.error),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Colors.pinkAccent[100],
+                          borderRadius: BorderRadius.circular(
+                            10.0,
+                          ),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/products',
+                                arguments: ScreenArguments('', i[1], i[2]));
+                          },
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: i[0],
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    new BorderRadius.all(Radius.circular(10.0)),
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover),
+                              ),
                             ),
-                          ));
+                            errorWidget: (context, url, error) =>
+                                new Icon(Icons.error),
+                          ),
+                        ),
+                      );
                     },
                   );
                 }).toList(),

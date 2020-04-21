@@ -7,6 +7,7 @@ import 'package:flutter_scaffold/products/products.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
+import "dart:math";
 
 class ProductArg {
   Product product;
@@ -17,6 +18,21 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final emailId;
   ProductCard(this.img, this.product, this.emailId);
+
+  static List<Color> colors = [
+    Colors.pink[200],
+    Colors.pinkAccent[200],
+    Colors.cyan[200],
+    Colors.grey[200],
+    Colors.amber[200]
+  ];
+
+// generates a new Random object
+  static var _random = new Random();
+
+// generate a random index based on the list length
+// and use it to retrieve the element
+  // Color color = list[_random.nextInt(list.length)];
 
   Widget _buildImageWidget(context) {
     Product product = Provider.of<Product>(context);
@@ -80,24 +96,60 @@ class ProductCard extends StatelessWidget {
         child: Stack(
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            CachedNetworkImage(
-              fit: BoxFit.fill,
-              imageUrl: imageUrl,
-              imageBuilder: (context, imageProvider) => Container(
-                // width: 80.0,
-                // height: 80.0,
-                margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
-                decoration: BoxDecoration(
-                  borderRadius: new BorderRadius.all(Radius.circular(10.0)),
-                  image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.cover),
+            // Hero(
+            //   tag: product.id,
+            //   child: Container(
+            //     margin: EdgeInsets.only(left: 10, right: 10),
+            //     child: ClipRRect(
+            //       borderRadius: BorderRadius.circular(
+            //         10.0,
+            //       ),
+            //       child: CachedNetworkImage(
+            //         // fit: BoxFit.fill,
+            //         fadeInCurve: Curves.easeInCubic,
+            //         fadeInDuration: Duration(milliseconds: 900),
+            //         //     margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+            //         imageUrl: imageUrl,
+            //         // alignment: Alignment.center,
+            //         fit: BoxFit.cover,
+            //       ),
+            //     ),
+            //     decoration: BoxDecoration(
+            //       color: colors[_random.nextInt(3)],
+            //       borderRadius: BorderRadius.circular(
+            //         10.0,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+              child: CachedNetworkImage(
+                fit: BoxFit.fill,
+                imageUrl: imageUrl,
+                imageBuilder: (context, imageProvider) => Container(
+                  // width: 80.0,
+                  // height: 80.0,
+                  // margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: new BorderRadius.all(Radius.circular(10.0)),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
+                  ),
+                ),
+                // placeholder: (context, url) => Center(
+                //     child: CircularProgressIndicator(
+                //   backgroundColor: Colors.pink[300],
+                //   valueColor:
+                //       new AlwaysStoppedAnimation<Color>(Colors.lightBlue),
+                // )),
+              ),
+              decoration: BoxDecoration(
+                color: colors[_random.nextInt(3)],
+                borderRadius: BorderRadius.circular(
+                  10.0,
                 ),
               ),
-              placeholder: (context, url) => Center(
-                  child: CircularProgressIndicator(
-                backgroundColor: Colors.pink[300],
-                valueColor: new AlwaysStoppedAnimation<Color>(Colors.lightBlue),
-              )),
             ),
             Positioned(
                 right: 10.0,

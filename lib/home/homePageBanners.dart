@@ -3,6 +3,7 @@ import 'package:flutter_scaffold/home/MiddleBanner.dart';
 import 'package:flutter_scaffold/home/OfferBanner.dart';
 import 'package:flutter_scaffold/home/SliderBanner.dart';
 import 'package:flutter_scaffold/home/SquareBanner.dart';
+import 'package:flutter_scaffold/home/BruhhEndText.dart';
 
 import 'SquareEndBanner.dart';
 
@@ -20,6 +21,7 @@ class HomePageBanners extends StatelessWidget {
         SquareBanner(),
         OfferBanner(),
         SquareEndBanner(),
+        // BruhhEndText()
       ],
     );
   }

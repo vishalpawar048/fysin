@@ -21,6 +21,7 @@ class SquareBanner extends StatelessWidget {
           } else {
             return Container(
               // height: 500.0,
+              margin: EdgeInsets.only(top: 25, bottom: 20),
               child: GridView.count(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -29,6 +30,9 @@ class SquareBanner extends StatelessWidget {
                 children: List.generate(squerBanners.length, (index) {
                   return Container(
                     child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                       clipBehavior: Clip.antiAlias,
                       child: InkWell(
                         onTap: () {
@@ -48,12 +52,6 @@ class SquareBanner extends StatelessWidget {
                               child: CachedNetworkImage(
                                 fit: BoxFit.cover,
                                 imageUrl: squerBanners[index][0],
-                                placeholder: (context, url) => Center(
-                                    child: CircularProgressIndicator(
-                                  backgroundColor: Colors.pink[300],
-                                  valueColor: new AlwaysStoppedAnimation<Color>(
-                                      Colors.lightBlue),
-                                )),
                                 errorWidget: (context, url, error) =>
                                     new Icon(Icons.error),
                               ),

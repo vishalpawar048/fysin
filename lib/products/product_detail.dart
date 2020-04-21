@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/products/products.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +6,7 @@ import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ProductDetails extends StatelessWidget {
   @override
@@ -253,13 +253,26 @@ share(BuildContext context, ShareMsg msg) {
       sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
 }
 
-class WebPage extends StatelessWidget {
+class WebPage extends StatefulWidget {
   final String selectedUrl;
 
   WebPage({
     @required this.selectedUrl,
   });
-  // WebViewController _controller;
+
+  @override
+  _WebPageState createState() => _WebPageState();
+}
+
+class _WebPageState extends State<WebPage> {
+  bool _isLoadingPage;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoadingPage = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -267,12 +280,47 @@ class WebPage extends StatelessWidget {
         title: const Text('Bruhh'),
         backgroundColor: Colors.pink[300],
       ),
-      body: Builder(builder: (BuildContext context) {
-        return WebView(
-          initialUrl: selectedUrl,
-          javascriptMode: JavascriptMode.unrestricted,
-        );
-      }),
+      body: Stack(
+        children: <Widget>[
+          new WebView(
+            initialUrl: widget.selectedUrl,
+            javascriptMode: JavascriptMode.unrestricted,
+            // onWebViewCreated: (webViewCreate) {
+            //   _controller.complete(webViewCreate);
+            // },
+            onPageFinished: (finish) {
+              setState(() {
+                _isLoadingPage = false;
+              });
+            },
+          ),
+          _isLoadingPage
+              // ? Container(
+              //     alignment: FractionalOffset.center,
+              //     child: CircularProgressIndicator(),
+              //   )
+              ? Center(
+                  child: SpinKitThreeBounce(
+                    size: 70.0,
+                    itemBuilder: (context, index) => DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.pink,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(
+                  color: Colors.transparent,
+                ),
+        ],
+      ),
     );
+    // body: Builder(builder: (BuildContext context) {
+    //   return WebView(
+    //     initialUrl: widget.selectedUrl,
+    //     javascriptMode: JavascriptMode.unrestricted,
+    //   );
+    // }),
   }
 }

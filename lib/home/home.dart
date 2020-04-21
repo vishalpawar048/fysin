@@ -10,6 +10,7 @@ import './wishListBtn.dart';
 import './homePageBanners.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
+import 'package:in_app_update/in_app_update.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -75,6 +76,7 @@ class _HomeState extends State<Home> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
+          backgroundColor: Colors.white,
           elevation: 0.0,
           actions: <Widget>[
             Search(),

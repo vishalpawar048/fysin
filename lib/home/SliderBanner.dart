@@ -22,7 +22,7 @@ class SliderBanner extends StatelessWidget {
               return Container();
             } else {
               return Container(
-                margin: EdgeInsets.symmetric(vertical: 8.0),
+                margin: EdgeInsets.only(top: 30),
                 height: 180.0,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
@@ -30,38 +30,36 @@ class SliderBanner extends StatelessWidget {
                     return Builder(
                       builder: (BuildContext context) {
                         return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.pinkAccent,
+                            borderRadius: BorderRadius.circular(
+                              10.0,
+                            ),
+                          ),
+                          margin: EdgeInsets.only(left: 5, right: 10),
                           width: 140.0,
-                          child: Card(
-                            clipBehavior: Clip.antiAlias,
+                          child: Hero(
+                            tag: '$i',
                             child: InkWell(
                               onTap: () {
                                 Navigator.pushNamed(context, '/products',
-                                    arguments:
-                                        ScreenArguments(null, i[1], i[2]));
+                                    arguments: ScreenArguments('', i[1], i[2]));
                               },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 172,
-                                    child: Hero(
-                                      tag: '$i',
-                                      child: CachedNetworkImage(
-                                        fit: BoxFit.cover,
-                                        imageUrl: i[0],
-                                        placeholder: (context, url) => Center(
-                                            child: CircularProgressIndicator(
-                                          backgroundColor: Colors.pink[300],
-                                          valueColor:
-                                              new AlwaysStoppedAnimation<Color>(
-                                                  Colors.lightBlue),
-                                        )),
-                                        errorWidget: (context, url, error) =>
-                                            new Icon(Icons.error),
-                                      ),
-                                    ),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: i[0],
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: new BorderRadius.all(
+                                        Radius.circular(10.0)),
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover),
                                   ),
-                                ],
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    new Icon(Icons.error),
                               ),
                             ),
                           ),

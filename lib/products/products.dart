@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_scaffold/home/CarouselBanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../config.dart';
 import '../home/wishListBtn.dart';
 import '../home/search.dart';
@@ -103,7 +103,7 @@ class Products extends StatelessWidget {
             body: {'keyword': keyword});
       } else {
         response = await http.post('$BASE_URL/products/getProductsByCategory/',
-            body: {'category': category, "subCategory": subCategory});
+            body: {"category": category, "subCategory": subCategory});
       }
 
       if (response.statusCode == 200) {
@@ -147,16 +147,21 @@ class Products extends StatelessWidget {
               case ConnectionState.active:
               case ConnectionState.waiting:
                 return Center(
-                    child: CircularProgressIndicator(
-                  backgroundColor: Colors.pink[300],
-                  valueColor:
-                      new AlwaysStoppedAnimation<Color>(Colors.lightBlue),
-                ));
+                  child: SpinKitThreeBounce(
+                    size: 70.0,
+                    itemBuilder: (context, index) => DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.pink,
+                      ),
+                    ),
+                  ),
+                );
               case ConnectionState.done:
                 if (snapshot.hasError)
                   return Center(
                       child: Text(
-                          "Something went wrong. Please try after some time.."));
+                          "Something went wrong. Please check your Internet connection.."));
                 return ProductGrid(
                     productsArray: snapshot.data,
                     productType: 'product',

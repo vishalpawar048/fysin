@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/home/CarouselBanner.dart';
 
@@ -19,19 +20,36 @@ class MiddleBanner extends StatelessWidget {
           return Container();
         } else {
           return Container(
-            child: Padding(
-                padding:
-                    EdgeInsets.only(top: 0.0, left: 8.0, right: 8.0, bottom: 8),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/products',
-                        arguments: ScreenArguments('', 'women', 'kurtis'));
-                  },
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(middleBanner[0][0]),
-                  ),
-                )),
+            margin: EdgeInsets.only(top: 25, left: 10, right: 10),
+            decoration: BoxDecoration(
+              color: Colors.pinkAccent,
+              borderRadius: BorderRadius.circular(
+                10.0,
+              ),
+            ),
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/products',
+                    arguments: ScreenArguments(
+                        '', middleBanner[0][1], middleBanner[0][2]));
+              },
+              // child: CachedNetworkImage(
+              //   fit: BoxFit.cover,
+              //   imageUrl: middleBanner[0][0],
+              //   imageBuilder: (context, imageProvider) => Container(
+              //     decoration: BoxDecoration(
+              //       borderRadius: new BorderRadius.all(Radius.circular(10.0)),
+              //       image: DecorationImage(
+              //           image: imageProvider, fit: BoxFit.cover),
+              //     ),
+              //   ),
+              //   errorWidget: (context, url, error) => new Icon(Icons.error),
+              // ),
+              child: Image(
+                fit: BoxFit.cover,
+                image: NetworkImage(middleBanner[0][0]),
+              ),
+            ),
           );
         }
       },

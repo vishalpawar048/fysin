@@ -6,6 +6,7 @@ class CategoriesBtns extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       // mainAxisAlignment: MainAxisAlignment.center,
+
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         SizedBox(
@@ -38,7 +39,7 @@ class CategoriesBtns extends StatelessWidget {
 
   Widget headerCategoryItem(String name, String imgUrl, context, {onPressed}) {
     return Container(
-      margin: EdgeInsets.only(top: 2, right: 10, left: 10, bottom: 4),
+      margin: EdgeInsets.only(top: 15, right: 10, left: 10, bottom: 4),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,7 +68,7 @@ class CategoriesBtns extends StatelessWidget {
           ),
 
           // Text(name + ' ›', style: categoryText)
-          Text(name + ' ›')
+          // Text(name + ' ›')
         ],
       ),
     );
