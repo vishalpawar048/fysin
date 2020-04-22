@@ -5,6 +5,7 @@ import 'package:flutter_scaffold/home/CarouselBanner.dart';
 import 'package:flutter_scaffold/home/CategoriesBtns.dart';
 import 'package:intl/intl.dart';
 import '../config.dart';
+import '../versionCheck.dart';
 import './search.dart';
 import './wishListBtn.dart';
 import './homePageBanners.dart';
@@ -24,6 +25,12 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     firebaseCloudMessaging_Listeners();
+    try {
+      versionCheck(context);
+    } catch (e) {
+      print(e);
+    }
+    super.initState();
   }
 
   void firebaseCloudMessaging_Listeners() {

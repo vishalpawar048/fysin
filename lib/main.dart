@@ -6,9 +6,11 @@ import './products/product_detail.dart';
 import 'package:flutter_scaffold/wishlist.dart';
 import 'package:provider/provider.dart';
 import './products/products.dart';
+import './versionCheck.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<AuthBlock>.value(value: AuthBlock()),
