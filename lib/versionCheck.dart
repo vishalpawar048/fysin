@@ -43,7 +43,7 @@ _showVersionDialog(context) async {
     builder: (BuildContext context) {
       String title = "New Update Available";
       String message =
-          "There is a newer version of app available please update it now.";
+          "There is a newer version of bruhh available please update.";
       String btnLabel = "Update Now";
       String btnLabelCancel = "Later";
       return Platform.isIOS

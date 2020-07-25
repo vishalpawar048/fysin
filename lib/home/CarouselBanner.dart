@@ -23,22 +23,6 @@ class ScreenArguments {
   ScreenArguments(this.keyword, this.category, this.subCategory);
 }
 
-// class Banner with ChangeNotifier {
-//   final String id;
-//   final String keyword;
-//   final String imageUrl;
-//   final String subCategory;
-//   final String category;
-
-//   Banner({
-//     @required this.id,
-//     @required this.keyword,
-//     @required this.imageUrl,
-//     @required this.subCategory,
-//     @required this.category,
-//   });
-// }
-
 class _HomeSliderState extends State<HomeSlider> {
   final List imgList = [];
   List banners;
@@ -62,7 +46,7 @@ class _HomeSliderState extends State<HomeSlider> {
   Widget build(BuildContext context) {
     return Container(
       // margin: EdgeInsets.only(top: 15),
-      margin: EdgeInsets.only(top: 15, left: 5, right: 5),
+      margin: EdgeInsets.only(top: 5, left: 5, right: 5),
       child: FutureBuilder(
           future: getBanner(),
           builder: (context, AsyncSnapshot snapshot) {

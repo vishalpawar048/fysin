@@ -4,7 +4,7 @@ class WishListBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 0),
+        margin: EdgeInsets.only(right: 5),
         child: new RawMaterialButton(
           constraints: BoxConstraints.tight(Size(36, 36)),
           shape: new CircleBorder(),

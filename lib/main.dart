@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/auth/auth.dart';
 import 'package:flutter_scaffold/blocks/auth_block.dart';
 import 'package:flutter_scaffold/home/home.dart';
+import 'package:flutter_scaffold/products/productGrid.dart';
+import 'package:flutter_scaffold/products/productGrid1.dart';
 import './products/product_detail.dart';
 import 'package:flutter_scaffold/wishlist.dart';
 import 'package:provider/provider.dart';
 import './products/products.dart';
+import './products/sortAndFilter.dart';
+import './apis/GetProducts.dart';
 import './versionCheck.dart';
+import 'notifier/productNotifier.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +20,9 @@ void main() {
     providers: [
       ChangeNotifierProvider<AuthBlock>.value(value: AuthBlock()),
       ChangeNotifierProvider<Product>.value(value: Product()),
+      ChangeNotifierProvider<ProductArray>.value(value: ProductArray()),
+      ChangeNotifierProvider<Sort>.value(value: Sort()),
+      ChangeNotifierProvider<Websites>.value(value: Websites()),
     ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -29,7 +37,8 @@ void main() {
         // '/categorise': (BuildContext context) => Categorise(),
         '/products': (BuildContext context) => Products(),
         '/productDetails': (BuildContext context) => ProductDetails(),
-        // '/products': (BuildContext context) => Products(),
+        '/productGrid1': (BuildContext context) => ProductGrid1(),
+
         '/wishList': (BuildContext context) => WishList(),
       },
     ),

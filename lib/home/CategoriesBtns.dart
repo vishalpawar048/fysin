@@ -39,7 +39,7 @@ class CategoriesBtns extends StatelessWidget {
 
   Widget headerCategoryItem(String name, String imgUrl, context, {onPressed}) {
     return Container(
-      margin: EdgeInsets.only(top: 15, right: 10, left: 10, bottom: 4),
+      margin: EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,9 +48,14 @@ class CategoriesBtns extends StatelessWidget {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/products',
+                  Navigator.pushNamed(context, '/ProductGrid1',
                       arguments: ScreenArguments(null, name, ''));
                 },
+
+                // onTap: () {
+                //   Navigator.pushNamed(context, '/products',
+                //       arguments: ScreenArguments(null, name, ''));
+                // },
                 child: new Container(
                   width: 70.0,
                   height: 70.0,

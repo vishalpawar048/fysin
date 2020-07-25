@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_scaffold/notifier/productNotifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_scaffold/config.dart';
 import 'package:flutter_scaffold/products/product_detail.dart';
@@ -14,10 +15,10 @@ class ProductArg {
 }
 
 class ProductCard extends StatelessWidget {
-  final String img;
+  // final String img;
   final Product product;
   final emailId;
-  ProductCard(this.img, this.product, this.emailId);
+  ProductCard(this.product, this.emailId);
 
   static List<Color> colors = [
     Colors.pink[200],
@@ -77,8 +78,8 @@ class ProductCard extends StatelessWidget {
       );
     }
 
-    if (img != null && img != '') {
-      String imageUrl = img;
+    if (product.imageUrls[0] != null && product.imageUrls[0] != '') {
+      String imageUrl = product.imageUrls[0];
       return InkWell(
         onTap: () {
           Navigator.push(
@@ -96,53 +97,18 @@ class ProductCard extends StatelessWidget {
         child: Stack(
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // Hero(
-            //   tag: product.id,
-            //   child: Container(
-            //     margin: EdgeInsets.only(left: 10, right: 10),
-            //     child: ClipRRect(
-            //       borderRadius: BorderRadius.circular(
-            //         10.0,
-            //       ),
-            //       child: CachedNetworkImage(
-            //         // fit: BoxFit.fill,
-            //         fadeInCurve: Curves.easeInCubic,
-            //         fadeInDuration: Duration(milliseconds: 900),
-            //         //     margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
-            //         imageUrl: imageUrl,
-            //         // alignment: Alignment.center,
-            //         fit: BoxFit.cover,
-            //       ),
-            //     ),
-            //     decoration: BoxDecoration(
-            //       color: colors[_random.nextInt(3)],
-            //       borderRadius: BorderRadius.circular(
-            //         10.0,
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Container(
               margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
               child: CachedNetworkImage(
                 fit: BoxFit.fill,
                 imageUrl: imageUrl,
                 imageBuilder: (context, imageProvider) => Container(
-                  // width: 80.0,
-                  // height: 80.0,
-                  // margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
                   decoration: BoxDecoration(
                     borderRadius: new BorderRadius.all(Radius.circular(10.0)),
                     image: DecorationImage(
                         image: imageProvider, fit: BoxFit.cover),
                   ),
                 ),
-                // placeholder: (context, url) => Center(
-                //     child: CircularProgressIndicator(
-                //   backgroundColor: Colors.pink[300],
-                //   valueColor:
-                //       new AlwaysStoppedAnimation<Color>(Colors.lightBlue),
-                // )),
               ),
               decoration: BoxDecoration(
                 color: colors[_random.nextInt(3)],

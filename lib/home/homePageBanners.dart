@@ -4,6 +4,8 @@ import 'package:flutter_scaffold/home/OfferBanner.dart';
 import 'package:flutter_scaffold/home/SliderBanner.dart';
 import 'package:flutter_scaffold/home/SquareBanner.dart';
 import 'package:flutter_scaffold/home/BruhhEndText.dart';
+import 'package:flutter_scaffold/notifier/productNotifier.dart';
+import 'package:provider/provider.dart';
 
 import 'SquareEndBanner.dart';
 

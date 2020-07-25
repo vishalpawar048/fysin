@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/home/CarouselBanner.dart';
 import 'package:flutter_scaffold/home/CategoriesBtns.dart';
+import 'package:flutter_scaffold/home/menuBar.dart';
+import 'package:flutter_scaffold/notifier/productNotifier.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../config.dart';
 import '../versionCheck.dart';
 import './search.dart';
@@ -79,10 +82,13 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavDrawer(),
+
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
+          iconTheme: new IconThemeData(color: Colors.pink[100]),
           backgroundColor: Colors.white,
           elevation: 0.0,
           actions: <Widget>[

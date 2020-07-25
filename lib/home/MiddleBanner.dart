@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scaffold/home/CarouselBanner.dart';
+import 'package:flutter_scaffold/notifier/productNotifier.dart';
+import 'package:provider/provider.dart';
 
 import 'Banners.dart';
 
@@ -13,6 +15,8 @@ class MiddleBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Sort sort = Provider.of<Sort>(context);
+
     return FutureBuilder(
       future: getBanner(),
       builder: (context, snapshot) {
@@ -28,10 +32,20 @@ class MiddleBanner extends StatelessWidget {
               ),
             ),
             child: InkWell(
+              // onTap: () {
+              //   Navigator.pushNamed(context, '/products',
+              //       arguments: ScreenArguments(
+              //           '', middleBanner[0][1], middleBanner[0][2]));
+              // },
               onTap: () {
-                Navigator.pushNamed(context, '/products',
+                sort.sortByPrice(0);
+                Navigator.pushNamed(context, '/productGrid1',
                     arguments: ScreenArguments(
                         '', middleBanner[0][1], middleBanner[0][2]));
+
+                // Navigator.pushNamed(context, '/productGrid1',
+                //     arguments: ScreenArguments(
+                //         '', middleBanner[0][1], middleBanner[0][2]));
               },
               // child: CachedNetworkImage(
               //   fit: BoxFit.cover,
